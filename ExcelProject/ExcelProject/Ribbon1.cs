@@ -55,8 +55,8 @@ namespace ExcelProject
             CurrentSheet.Range["A11"].Font.Bold = true;
             CurrentSheet.Range["A11"].Borders.Color = System.Drawing.Color.Black;
 
-            CurrentSheet.Range["C11"].Font.Bold = true;
-            CurrentSheet.Range["C11"].Borders.Color = System.Drawing.Color.Black;
+            CurrentSheet.Range["B11"].Font.Bold = true;
+            CurrentSheet.Range["B11"].Borders.Color = System.Drawing.Color.Black;
 
             #endregion
 
