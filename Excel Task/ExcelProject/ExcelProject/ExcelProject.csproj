@@ -21,7 +21,7 @@
     <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A6C46806-6048-45B0-9BFF-016341F21EA4}</ProjectGuid>
+    <ProjectGuid>{83D2CE80-3D63-49EF-BD44-DF14806F3DB9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
     <RootNamespace>ExcelProject</RootNamespace>
@@ -231,7 +231,7 @@
     <ManifestKeyFile>ExcelProject_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>CF3A7BF6767EFA3D36AB80C627FC4C7E3B6DB264</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>93F8AD1B8CBCF842EAED850EF31C08DEDBEA809D</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
