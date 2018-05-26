@@ -6,12 +6,15 @@ using Microsoft.Office.Tools.Ribbon;
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Excel;
 using System.Windows.Forms;
+using System.Globalization;
+
 namespace ExcelProject
 {
     public partial class Ribbon1
     {
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
+           DataItems = db.Data_item.ToList();
 
         }
 
@@ -317,10 +320,11 @@ namespace ExcelProject
         #region Database
         ExcelModel db = new ExcelModel();
         Company CompanyDetails = new Company();
-        List<Company> CompanyList = new List<Company>();
         Data_item items = new Data_item();
         Data_type type = new Data_type();
         NonPeriodic_Data_Draft MyData = new NonPeriodic_Data_Draft();
+        List<Data_item> DataItems = new List<Data_item>();
+
         #endregion
 
 
@@ -340,10 +344,30 @@ namespace ExcelProject
             #endregion
 
             #region B3
+            string RouterCode = CurrentSheet.Range["B3"].Value?.ToString();
 
-            if (CurrentSheet.Range["B3"].Value != null && float.TryParse(CurrentSheet.Range["B3"].Value2.ToString(), out float Reu_code))
+            if (!string.IsNullOrEmpty(RouterCode) && !RouterCode.Any(x=>x=='-') )
             {
-                CompanyDetails.Reu_Code = float.Parse(CurrentSheet.Range["B3"].Value2.ToString());
+                float r;
+                if (RouterCode.StartsWith("(") && RouterCode.EndsWith(")"))
+                {
+                    string RouterCode2 = RouterCode.Remove(0, 1);
+                    string RouterCode3 = RouterCode2.Remove(RouterCode2.Length - 1, 1);
+
+                    if (float.TryParse(RouterCode3, out r))
+                        CompanyDetails.Reu_Code = -r;
+                    else
+                        MessageBox.Show("Enter A valid Value between The brackets In Reuter Code Field");
+
+
+                }
+
+                else if (float.TryParse(RouterCode, out r))
+                    CompanyDetails.Reu_Code = r;
+                else
+                {
+                    MessageBox.Show("Enter A real  valid Value In Reuter Code Field");
+                }
             }
 
             else
@@ -456,6 +480,7 @@ namespace ExcelProject
         #region from A10 to A13
         private void Required_Nonperiodic_data(Worksheet CurrentSheet)
         {
+           // MyData = new NonPeriodic_Data_Draft();
             string CompanyName = CurrentSheet.Range["B2"].Value.ToString();
             var Company =( from y in db.Companies
                             where y.Comp_Name == CompanyName
@@ -468,19 +493,21 @@ namespace ExcelProject
             string targetPrice = CurrentSheet.Range["B11"].Value.ToString();
             string inv_tehs = CurrentSheet.Range["B12"].Value.ToString();
             string valrisks = CurrentSheet.Range["B13"].Value.ToString();
+            #region Rate
 
-           while (string.IsNullOrEmpty(Rate))
+            while (string.IsNullOrEmpty(Rate))
             {
                 MessageBox.Show("Enter A Valid Value in Rating Cell");
 
             }
-
             Rate =Rate.ToLower();
             if (Rate == "neutral")
             {
                 MyData.op_value = Rate;
                 MyData.item_code = 8;
                 MyData.comp_id = int.Parse(CompanyID.ToString());
+                db.NonPeriodic_Data_Draft.Add(MyData);
+
             }
             else if (Rate == "positive")
             {
@@ -488,6 +515,7 @@ namespace ExcelProject
                 MyData.op_value = Rate;
                 MyData.item_code = 8;
                 MyData.comp_id = int.Parse(CompanyID.ToString());
+                db.NonPeriodic_Data_Draft.Add(MyData);
 
 
             }
@@ -496,13 +524,18 @@ namespace ExcelProject
                 MyData.op_value = Rate;
                 MyData.item_code = 8;
                 MyData.comp_id = int.Parse(CompanyID.ToString());
+                db.NonPeriodic_Data_Draft.Add(MyData);
 
             }
             else
             {
                 MessageBox.Show("Enter positive or Negative or Neutral in Rating Cell");
             }
+            db.SaveChanges();
 
+            #endregion
+
+            #region Target
 
             while (string.IsNullOrEmpty(targetPrice))
             {
@@ -513,6 +546,12 @@ namespace ExcelProject
             MyData.op_value = targetPrice;
             MyData.item_code = 8;
             MyData.comp_id = int.Parse(CompanyID.ToString());
+            db.NonPeriodic_Data_Draft.Add(MyData);
+            db.SaveChanges();
+
+            #endregion
+
+            #region Investment
 
             while (string.IsNullOrEmpty(inv_tehs))
             {
@@ -523,7 +562,12 @@ namespace ExcelProject
             MyData.op_value = inv_tehs;
             MyData.item_code = 8;
             MyData.comp_id = int.Parse(CompanyID.ToString());
+            db.NonPeriodic_Data_Draft.Add(MyData);
+            db.SaveChanges();
 
+            #endregion
+
+            #region valrisks
 
             while (string.IsNullOrEmpty(valrisks))
             {
@@ -534,29 +578,38 @@ namespace ExcelProject
             MyData.op_value = valrisks;
             MyData.item_code = 8;
             MyData.comp_id = int.Parse(CompanyID.ToString());
+            db.NonPeriodic_Data_Draft.Add(MyData);
+            db.SaveChanges();
 
+            #endregion
 
 
         }
         #endregion
+        int index = 0;
 
         #region Non-periodic Function
         private void NonPeriodic(Worksheet CurrentSheet)
         {
+            //MyData = new NonPeriodic_Data_Draft();
+
             //31
-            List<double> OutstandingShares;
             Company LastCompany = (from x in db.Companies
                                    orderby x.Comp_id descending
                                    select x).FirstOrDefault();
+
             for (int i = 18; i < 55; i++)
             {
-                if(i==21||i==25||i==35||i==42||i==47||i==52)
+
+                if (i==21||i==25||i==35||i==42||i==47||i==52)
                 {
                     continue;
                 }
 
-                GetLists(out OutstandingShares, i, CurrentSheet, LastCompany);
-
+                if (Flag != false)
+                    GetLists(i, CurrentSheet, LastCompany);
+                else
+                    return;
 
             }
 
@@ -565,65 +618,80 @@ namespace ExcelProject
 
 
         #region Add Every cell for everyRow
-        void addCellForRow(Worksheet CurrentSheet, int CellNum, char CellChar, Company LastCompany)
+        void addCellForRow(Worksheet CurrentSheet, int CellNum, char CellChar, Company LastCompany,int index)
         {
             string cell = CurrentSheet.Range[$"{CellChar}{CellNum}"].Value2.ToString();
+           /* if(cell.Any(x=>x=='-'))
+            {
+                MessageBox.Show("Enter Positive Number Please");
+                Flag = false;
+                return;
+            }*/
             MyData.op_value = cell;
             DateTime date;
             if (DateTime.TryParse(CurrentSheet.Range[$"{CellChar}{16}"].Value2.ToString(), out date))
                 MyData.op_date = date;
-            MyData.item_code = 18;
+
+            MyData.op_date = DateTime.ParseExact(CurrentSheet.Range[$"{CellChar}{16}"].Value2.ToString(),"dd/MM/yyyy",CultureInfo.InvariantCulture);
+            MyData.item_code = DataItems[index].item_code;
+
+
 
 
 
             MyData.comp_id = LastCompany.Comp_id;
+
             db.NonPeriodic_Data_Draft.Add(MyData);
             db.SaveChanges();
+
 
         }
         #endregion
 
         #region Get lists Function
-        private void GetLists(out List<double> OurList, int CellNum, Worksheet CurrentSheet, Company LastCompany)
+        private void GetLists(int CellNum, Worksheet CurrentSheet, Company LastCompany)
         {
-            OurList = new List<double>();
 
 
-            if (CurrentSheet.Range[$"B{CellNum}"].Value2!=null)
+            if (CurrentSheet.Range[$"B{CellNum}"].Value2!=null && Flag!=false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'B', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'B', LastCompany,index);
             }
 
-            if (CurrentSheet.Range[$"C{CellNum}"].Value2 != null)
+            if (CurrentSheet.Range[$"C{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'C', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'C', LastCompany, index);
             }
 
-            if (CurrentSheet.Range[$"D{CellNum}"].Value2 != null)
+            if (CurrentSheet.Range[$"D{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'D', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'D', LastCompany, index);
             }
 
-            if (CurrentSheet.Range[$"E{CellNum}"].Value2 != null)
+            if (CurrentSheet.Range[$"E{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'E', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'E', LastCompany, index);
             }
-            if (CurrentSheet.Range[$"F{CellNum}"].Value2 != null)
+            if (CurrentSheet.Range[$"F{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'F', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'F', LastCompany, index);
             }
-            if (CurrentSheet.Range[$"G{CellNum}"].Value2 != null)
+            if (CurrentSheet.Range[$"G{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'G', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'G', LastCompany, index);
             }
-            if (CurrentSheet.Range[$"H{CellNum}"].Value2 != null)
+            if (CurrentSheet.Range[$"H{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'H', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'H', LastCompany, index);
             }
-            if (CurrentSheet.Range[$"I{CellNum}"].Value2 != null)
+            if (CurrentSheet.Range[$"I{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'I', LastCompany);
+                addCellForRow(CurrentSheet, CellNum, 'I', LastCompany, index);
             }
+
+            if(Flag!=false)
+              index++;
+
         }
         #endregion
 
@@ -632,7 +700,6 @@ namespace ExcelProject
         {
             Microsoft.Office.Interop.Excel.Worksheet activeSheet = Globals.ThisAddIn.Application.ActiveSheet;
             Microsoft.Office.Interop.Excel.Range Range_ = activeSheet.UsedRange;
-            dynamic CellValue;
 
             for (int a = 1; a <= Range_.Areas.Count; a++)
             {
@@ -644,19 +711,52 @@ namespace ExcelProject
                         break;
                     for (int c = 2; c <= 9; c++)
                     { // Cell value 
-                        if (r == 25 || r == 29 || r == 30 || r == 34 || r == 35 || r == 38 || r == 42 || r == 44 || r == 45 || r == 47 || r == 52)
+                        if ( r == 25 || r == 29 || r == 30 || r == 34 || r == 35 || r == 38 || r == 42 || r == 44 || r == 45 || r == 47 || r == 52)
                         {
                             continue;
                         }
 
-                        CellValue = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2;
+                        //CellValue = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2;
                         if (((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2 == null)
                         {
                             Flag = false;
                             MessageBox.Show("Enter All Required Fields Please :)");
-
+                           
                             break;
 
+                        }
+
+                        string v = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2.ToString();
+                        if (v.Any(x=>x=='-'))
+                        {
+                            Flag = false;
+                            MessageBox.Show("Enter Positive Number Please");
+                            
+                            return;
+                        }
+
+                    }
+                }
+                for (int r = 18; r <= 21; r++)
+                {
+                    if (Flag == false)
+                        break;
+                    for (int c = 2; c <= 9; c++)
+                    { // Cell value 
+                        
+                   
+
+                        string v = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2?.ToString();
+
+                        if (!string.IsNullOrEmpty(v))
+                        {
+                            if (v.Any(x => x == '-'))
+                            {
+                                Flag = false;
+                                MessageBox.Show("Enter Positive Number Please");
+
+                                return;
+                            }
                         }
 
                     }
@@ -677,7 +777,12 @@ namespace ExcelProject
                 Required_Nonperiodic_data(CurrentSheet);
                 NonPeriodic(CurrentSheet);
             }
-            db.SaveChanges();
+           /* else
+            {
+                MessageBox.Show(" Follow all instructions please :) "); 
+            }*/
+
+            //db.SaveChanges();
         }
     }
 }
