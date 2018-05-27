@@ -12,11 +12,29 @@ namespace ExcelProject
 {
     public partial class Ribbon1
     {
+
+        #region Declarations
+        Worksheet CurrentSheet;
+        Company MyCompanyData;
+        private bool Flag = true;
+        int index = 0;
+        ExcelModel db = new ExcelModel();
+        Company CompanyDetails = new Company();
+        Data_item items = new Data_item();
+        Data_type type = new Data_type();
+        NonPeriodic_Data_Draft MyData = new NonPeriodic_Data_Draft();
+        List<Data_item> DataItems = new List<Data_item>();
+
+        #endregion
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
-           DataItems = db.Data_item.ToList();
+            MyCompanyData = new Company();
+            CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
+            DataItems = db.Data_item.ToList();
 
         }
+
+        #region 1.Create ExcelSheet
 
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
@@ -315,17 +333,35 @@ namespace ExcelProject
             CurrentSheet.Columns.AutoFit();
 
         }
-
-        private bool Flag = true;
-        #region Database
-        ExcelModel db = new ExcelModel();
-        Company CompanyDetails = new Company();
-        Data_item items = new Data_item();
-        Data_type type = new Data_type();
-        NonPeriodic_Data_Draft MyData = new NonPeriodic_Data_Draft();
-        List<Data_item> DataItems = new List<Data_item>();
-
         #endregion
+
+        #region 2.GetCompanyData from DB
+
+        private void button3_Click(object sender, RibbonControlEventArgs e)
+        {
+           
+            string r = CurrentSheet.Range["B3"].Value?.ToString();
+            float ReuterCode;
+            if (float.TryParse(r,out ReuterCode)){
+
+                MyCompanyData=db.Companies.FirstOrDefault(x => x.Reu_Code == ReuterCode);
+                if (MyCompanyData != null) {
+
+                    //Fill All Excel Sheet
+                }
+                else
+                {
+                    MessageBox.Show("This Company doesn't exist in our Data base please try another ReuterCode ");
+                }
+            }
+
+        }
+        #endregion
+
+
+        #region 3.SaveCompanyData To DB
+
+      
 
 
         #region Periodic data Function
@@ -477,7 +513,7 @@ namespace ExcelProject
         #endregion
 
 
-        #region from A10 to A13
+        #region Required_Nonperiodic_data_from A10 to A13
         private void Required_Nonperiodic_data(Worksheet CurrentSheet)
         {
            // MyData = new NonPeriodic_Data_Draft();
@@ -586,7 +622,7 @@ namespace ExcelProject
 
         }
         #endregion
-        int index = 0;
+       
 
         #region Non-periodic Function
         private void NonPeriodic(Worksheet CurrentSheet)
@@ -764,11 +800,15 @@ namespace ExcelProject
             }
         }
 
+
+       
+     
+
+
         private void button2_Click(object sender, RibbonControlEventArgs e)
         {
             Flag = true;
 
-            Worksheet CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
             CheckRequired();
 
             if (Flag == true)
@@ -777,12 +817,13 @@ namespace ExcelProject
                 Required_Nonperiodic_data(CurrentSheet);
                 NonPeriodic(CurrentSheet);
             }
-           /* else
-            {
-                MessageBox.Show(" Follow all instructions please :) "); 
-            }*/
+            /* else
+             {
+                 MessageBox.Show(" Follow all instructions please :) "); 
+             }*/
 
             //db.SaveChanges();
         }
+        #endregion
     }
 }
