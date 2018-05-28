@@ -15,21 +15,25 @@ namespace ExcelProject
 
         #region Declarations
         Worksheet CurrentSheet;
-        Company MyCompanyData;
-        private bool Flag = true;
-        int index = 0;
+        Company MyCompanyData=new Company();
+        private bool Flag = true;bool IsThereLastPrice = false;bool Has_NonPeriodic_Data_Draft = false;
+        int index = 0;double OldTargetPrice = 0.0;
         ExcelModel db = new ExcelModel();
         Company CompanyDetails = new Company();
         Data_item items = new Data_item();
         Data_type type = new Data_type();
         NonPeriodic_Data_Draft MyData = new NonPeriodic_Data_Draft();
+        NonPeriodic_Data_Draft CurrentNonPeriodicData= new NonPeriodic_Data_Draft();
+
+        List<NonPeriodic_Data_Draft> List_NonPeriodic_DataDraft_Data = new List<NonPeriodic_Data_Draft>();
+
         List<Data_item> DataItems = new List<Data_item>();
 
         #endregion
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             MyCompanyData = new Company();
-            CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
+             
             DataItems = db.Data_item.ToList();
 
         }
@@ -38,7 +42,7 @@ namespace ExcelProject
 
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
-            Worksheet CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
+            CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet(); 
             #region A1
             CurrentSheet.Range["A1"].Value = "Refernce Data";
             CurrentSheet.Range["A1"].Font.Bold = true;
@@ -339,29 +343,140 @@ namespace ExcelProject
 
         private void button3_Click(object sender, RibbonControlEventArgs e)
         {
-           
-            string r = CurrentSheet.Range["B3"].Value?.ToString();
-            float ReuterCode;
-            if (float.TryParse(r,out ReuterCode)){
+            CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
 
-                MyCompanyData=db.Companies.FirstOrDefault(x => x.Reu_Code == ReuterCode);
-                if (MyCompanyData != null) {
+            //string r = CurrentSheet.Range["B3"].Value?.ToString();
+            if (CurrentSheet.Range["B3"].Value==null)
+            {
+                MessageBox.Show("Enter The Company Reuter Code Please ");
+                CurrentSheet.Range["B3"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red);
+                CurrentSheet.Range["A3"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red);
 
-                    //Fill All Excel Sheet
-                }
-                else
+            }
+            else
+            {
+                float ReuterCode;
+                if (float.TryParse(CurrentSheet.Range["B3"].Value.ToString(), out ReuterCode))
                 {
-                    MessageBox.Show("This Company doesn't exist in our Data base please try another ReuterCode ");
+
+                    MyCompanyData = db.Companies.FirstOrDefault(x => x.Reu_Code == ReuterCode);
+                    if (MyCompanyData != null)
+                    {
+                        CurrentSheet.Range["B3"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White);
+                        CurrentSheet.Range["A3"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White);
+
+                        //Fill All Excel Sheet
+                        FillCompanyData(MyCompanyData);
+                        Fill_Required_NonPeriodic_Data(MyCompanyData);
+                        Fill_NonPeriodic_Data(MyCompanyData);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("This Company doesn't exist in our Data base please try another ReuterCode ");
+                    }
                 }
             }
+           
 
         }
+        private void FillCompanyData(Company company)
+        {
+            CurrentSheet.Range["B2"].Value2 = company.Comp_Name;
+            CurrentSheet.Range["B4"].Value2 = company.Trd_Curr;
+            CurrentSheet.Range["B5"].Value2 = company.Curr_Out_Shares;
+            CurrentSheet.Range["B6"].Value2 = company.Industry.Ind_Name;
+            CurrentSheet.Range["B7"].Value2 = company.Sector.Sec_Name;
+           
+        }
+        private void Fill_Required_NonPeriodic_Data(Company company)
+        {
+
+            List_NonPeriodic_DataDraft_Data = (from e in db.NonPeriodic_Data_Draft
+                                        where e.comp_id == company.Comp_id
+                                        select e).ToList();
+            if (List_NonPeriodic_DataDraft_Data != null)
+            {
+                Has_NonPeriodic_Data_Draft = true;
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 36);//Rating
+                if (!string.IsNullOrEmpty(MyData?.op_value))
+                {
+                    CurrentSheet.Range["B10"].Value2 = MyData.op_value;
+
+                }
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 37);//Target Price
+                if (!string.IsNullOrEmpty(MyData?.op_value))
+                {
+                    IsThereLastPrice = true;
+                    OldTargetPrice=double.Parse(MyData.op_value);
+                    CurrentSheet.Range["B11"].Value2 = MyData.op_value;
+
+                }
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 38);//Investment Thesis(Text)
+                if (!string.IsNullOrEmpty(MyData?.op_value))
+                {
+                    CurrentSheet.Range["B12"].Value2 = MyData.op_value;
+
+                }
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 39);//Valuation and Risks (Text)
+                if (!string.IsNullOrEmpty(MyData?.op_value))
+                {
+                    CurrentSheet.Range["B13"].Value2 = MyData.op_value;
+
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("You didn't enter any (Non Periodic Data) Before");
+            }
+           
+
+        }
+
+    
+        private void Fill_NonPeriodic_Data(Company company)
+        {
+
+            if (List_NonPeriodic_DataDraft_Data != null)
+            {
+                Microsoft.Office.Interop.Excel.Worksheet activeSheet = Globals.ThisAddIn.Application.ActiveSheet;
+                Microsoft.Office.Interop.Excel.Range Range_ = activeSheet.UsedRange;
+                int index = 4;//Skip 4 rows (Rating,Target Price,Investment Thesis(Text),Valuation and Risks (Text)
+                for (int a = 1; a <= Range_.Areas.Count; a++)
+                {
+                    Microsoft.Office.Interop.Excel.Range area = Range_.Areas[a];
+
+                    for (int r = 18; r <= 54; r++)
+                    {
+
+                        for (int c = 2; c <= 9; c++)
+                        { // Cell value 
+                            if (r == 21 || r == 25 || r == 29 || r == 30 || r == 34 || r == 35 || r == 38 || r == 42 || r == 44 || r == 45 || r == 47 || r == 52)
+                            {
+                                continue;
+                            }
+
+                           ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2 = List_NonPeriodic_DataDraft_Data[index++];
+
+
+
+
+                        }
+                    }
+                }
+
+
+            }
+        }
+       
+
         #endregion
 
 
         #region 3.SaveCompanyData To DB
 
-      
+
 
 
         #region Periodic data Function
@@ -516,124 +631,205 @@ namespace ExcelProject
         #region Required_Nonperiodic_data_from A10 to A13
         private void Required_Nonperiodic_data(Worksheet CurrentSheet)
         {
-           // MyData = new NonPeriodic_Data_Draft();
-            string CompanyName = CurrentSheet.Range["B2"].Value.ToString();
-            var Company =( from y in db.Companies
-                            where y.Comp_Name == CompanyName
-                            select y).FirstOrDefault();
+                    // MyData = new NonPeriodic_Data_Draft();
+                    string CompanyName = CurrentSheet?.Range["B2"].Value?.ToString();
+                    if (!string.IsNullOrEmpty(MyCompanyData.Comp_Name)) { 
+                   /* var Company = (from y in db.Companies
+                                   where y.Comp_Name == CompanyName
+                                   select y).FirstOrDefault();*/
 
-            int CompanyID = Company.Comp_id;
-
-
-            string Rate = CurrentSheet.Range["B10"].Value.ToString();
-            string targetPrice = CurrentSheet.Range["B11"].Value.ToString();
-            string inv_tehs = CurrentSheet.Range["B12"].Value.ToString();
-            string valrisks = CurrentSheet.Range["B13"].Value.ToString();
-            #region Rate
-
-            while (string.IsNullOrEmpty(Rate))
-            {
-                MessageBox.Show("Enter A Valid Value in Rating Cell");
-
-            }
-            Rate =Rate.ToLower();
-            if (Rate == "neutral")
-            {
-                MyData.op_value = Rate;
-                MyData.item_code = 8;
-                MyData.comp_id = int.Parse(CompanyID.ToString());
-                db.NonPeriodic_Data_Draft.Add(MyData);
-
-            }
-            else if (Rate == "positive")
-            {
-
-                MyData.op_value = Rate;
-                MyData.item_code = 8;
-                MyData.comp_id = int.Parse(CompanyID.ToString());
-                db.NonPeriodic_Data_Draft.Add(MyData);
+                    int CompanyID = MyCompanyData.Comp_id;
 
 
-            }
-            else if (Rate == "negative")
-            {
-                MyData.op_value = Rate;
-                MyData.item_code = 8;
-                MyData.comp_id = int.Parse(CompanyID.ToString());
-                db.NonPeriodic_Data_Draft.Add(MyData);
+                    string Rate = CurrentSheet?.Range["B10"].Value?.ToString();
+                    string targetPrice = CurrentSheet?.Range["B11"].Value?.ToString();
+                    string inv_tehs = CurrentSheet?.Range["B12"].Value?.ToString();
+                    string valrisks = CurrentSheet?.Range["B13"].Value?.ToString();
+                    #region Rate
 
-            }
-            else
-            {
-                MessageBox.Show("Enter positive or Negative or Neutral in Rating Cell");
-            }
-            db.SaveChanges();
+                    while (string.IsNullOrEmpty(Rate))
+                    {
+                        MessageBox.Show("Enter A Valid Value in Rating Cell");
 
-            #endregion
+                    }
+                    Rate = Rate.ToLower();
 
-            #region Target
 
-            while (string.IsNullOrEmpty(targetPrice))
-            {
-                MessageBox.Show("Enter Valid Number in Target Price Cell");
+                    //Update current Data
+                    if (Has_NonPeriodic_Data_Draft)
+                    {
+                        MyData = List_NonPeriodic_DataDraft_Data[0];//Rating First Row
 
-            }
-           
-            MyData.op_value = targetPrice;
-            MyData.item_code = 8;
-            MyData.comp_id = int.Parse(CompanyID.ToString());
-            db.NonPeriodic_Data_Draft.Add(MyData);
-            db.SaveChanges();
+                        if (Rate == "neutral")
+                        {
+                            MyData.op_value = Rate;
+                       
+                        }
+                        else if (Rate == "buy")
+                        {
+                            MyData.op_value = Rate;
+                        }
+                        else if (Rate == "sell")
+                        {
+                            MyData.op_value = Rate;
+                       
+                        }
+                        else
+                        {
+                            MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
+                        }
 
-            #endregion
+                    }
 
-            #region Investment
+                    //Add New
+                    else
+                    {
+                        if (Rate == "neutral")
+                        {
+                            MyData.op_value = Rate;
+                            MyData.item_code = 36;
+                            MyData.comp_id = int.Parse(CompanyID.ToString());
+                            db.NonPeriodic_Data_Draft.Add(MyData);
 
-            while (string.IsNullOrEmpty(inv_tehs))
-            {
-                MessageBox.Show("Enter Valid Value in Valuation And Risks Thesis Cell");
+                        }
+                        else if (Rate == "buy")
+                        {
 
-            }
-           
-            MyData.op_value = inv_tehs;
-            MyData.item_code = 8;
-            MyData.comp_id = int.Parse(CompanyID.ToString());
-            db.NonPeriodic_Data_Draft.Add(MyData);
-            db.SaveChanges();
+                            MyData.op_value = Rate;
+                            MyData.item_code = 36;
+                            MyData.comp_id = int.Parse(CompanyID.ToString());
+                            db.NonPeriodic_Data_Draft.Add(MyData);
 
-            #endregion
 
-            #region valrisks
+                        }
+                        else if (Rate == "sell")
+                        {
+                            MyData.op_value = Rate;
+                            MyData.item_code = 36;//in table Data_item
+                            MyData.comp_id = int.Parse(CompanyID.ToString());
+                            db.NonPeriodic_Data_Draft.Add(MyData);
 
-            while (string.IsNullOrEmpty(valrisks))
-            {
-                MessageBox.Show("Enter Valid Value in Investment Thesis Cell");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
+                        }
+                    }
+                    db.SaveChanges();
 
-            }
-            
-            MyData.op_value = valrisks;
-            MyData.item_code = 8;
-            MyData.comp_id = int.Parse(CompanyID.ToString());
-            db.NonPeriodic_Data_Draft.Add(MyData);
-            db.SaveChanges();
+                    #endregion
 
-            #endregion
+                    #region Target Price
+                    double targetPriceDouble;
+                    while (string.IsNullOrEmpty(targetPrice))
+                    {
+                        MessageBox.Show("Enter  a value in Target Price Cell please");
 
+                    }
+                    while (!double.TryParse(targetPrice, out targetPriceDouble))
+                    {
+                        MessageBox.Show("Enter Valid Number in Target Price Cell please");
+
+                    }
+                    if (IsThereLastPrice)
+                    {/*
+                
+                       ex:OldTargetPrice=1000    =>  10% from 1000= 100
+                       then targetPriceDouble should be between 900 and 1100
+                       */
+                        double PrecentageValue = OldTargetPrice * .1;
+                        double MaxValue = OldTargetPrice + PrecentageValue;
+                        double MinValue = OldTargetPrice - PrecentageValue;
+
+                    if (targetPriceDouble <= MaxValue && targetPriceDouble >= MinValue) {
+
+                        MyData = List_NonPeriodic_DataDraft_Data[1];
+                        MyData.op_value = targetPrice;
+
+                    }//Target Price Second Row
+
+
+                    else
+                    {
+                        MessageBox.Show($"Target price should be between {MinValue} and {MaxValue} please");
+
+                    }
+
+             }
+                    //New Target Price
+                    else
+                    {
+                    MyData.op_value = targetPrice;
+                    MyData.item_code = 37;//in table Data_item
+                    MyData.comp_id = int.Parse(CompanyID.ToString());
+                    db.NonPeriodic_Data_Draft.Add(MyData);
+                }
+                  
+                    db.SaveChanges();
+
+                    #endregion
+
+                    #region Investment
+
+                    while (string.IsNullOrEmpty(inv_tehs))
+                    {
+                        MessageBox.Show("Enter Valid Value in Valuation And Risks Thesis Cell");
+
+                    }
+                    if (Has_NonPeriodic_Data_Draft)
+                    {
+                        MyData = List_NonPeriodic_DataDraft_Data[2];//Investment Thesis(Text) Third Row
+                        MyData.op_value = inv_tehs;
+
+                    }
+                    else
+                    {
+                        MyData.op_value = inv_tehs;
+                        MyData.item_code = 38;//in table Data_item
+                        MyData.comp_id = int.Parse(CompanyID.ToString());
+                        db.NonPeriodic_Data_Draft.Add(MyData);
+                    }
+                    db.SaveChanges();
+
+                    #endregion
+
+                    #region valrisks
+
+                    while (string.IsNullOrEmpty(valrisks))
+                    {
+                        MessageBox.Show("Enter Valid Value in Valuation and Risks  Cell");
+
+                    }
+                    if (Has_NonPeriodic_Data_Draft)
+                    {
+                        MyData = List_NonPeriodic_DataDraft_Data[3];//Valuation and Risks (Text)  Fourth Row
+                        MyData.op_value = valrisks;
+
+                    }
+                    else
+                    {
+                        MyData.op_value = valrisks;
+                        MyData.item_code = 39;//in table Data_item
+                        MyData.comp_id = int.Parse(CompanyID.ToString());
+                        db.NonPeriodic_Data_Draft.Add(MyData);
+                    }
+                        db.SaveChanges();
+
+                    #endregion
 
         }
+    }
         #endregion
        
 
         #region Non-periodic Function
         private void NonPeriodic(Worksheet CurrentSheet)
         {
-            //MyData = new NonPeriodic_Data_Draft();
-
             //31
-            Company LastCompany = (from x in db.Companies
+            /*Company LastCompany = (from x in db.Companies
                                    orderby x.Comp_id descending
                                    select x).FirstOrDefault();
-
+            */
             for (int i = 18; i < 55; i++)
             {
 
@@ -643,7 +839,7 @@ namespace ExcelProject
                 }
 
                 if (Flag != false)
-                    GetLists(i, CurrentSheet, LastCompany);
+                    GetLists(i, CurrentSheet, MyCompanyData);
                 else
                     return;
 
@@ -654,16 +850,19 @@ namespace ExcelProject
 
 
         #region Add Every cell for everyRow
-        void addCellForRow(Worksheet CurrentSheet, int CellNum, char CellChar, Company LastCompany,int index)
+        void addCellForRow(Worksheet CurrentSheet, int CellNum, char CellChar, Company CurrentCompany, int index)
         {
-            string cell = CurrentSheet.Range[$"{CellChar}{CellNum}"].Value2.ToString();
-           /* if(cell.Any(x=>x=='-'))
+            string cell = CurrentSheet?.Range[$"{CellChar}{CellNum}"].Value2?.ToString();
+            if (Has_NonPeriodic_Data_Draft)
             {
-                MessageBox.Show("Enter Positive Number Please");
-                Flag = false;
-                return;
-            }*/
-            MyData.op_value = cell;
+                MyData = List_NonPeriodic_DataDraft_Data[0];//Rating First Row
+            }
+            else
+            {
+
+
+            }
+                MyData.op_value = cell;
             DateTime date;
             if (DateTime.TryParse(CurrentSheet.Range[$"{CellChar}{16}"].Value2.ToString(), out date))
                 MyData.op_date = date;
@@ -675,7 +874,7 @@ namespace ExcelProject
 
 
 
-            MyData.comp_id = LastCompany.Comp_id;
+            MyData.comp_id = CurrentCompany.Comp_id;
 
             db.NonPeriodic_Data_Draft.Add(MyData);
             db.SaveChanges();
@@ -685,44 +884,44 @@ namespace ExcelProject
         #endregion
 
         #region Get lists Function
-        private void GetLists(int CellNum, Worksheet CurrentSheet, Company LastCompany)
+        private void GetLists(int CellNum, Worksheet CurrentSheet, Company CurrentCompany)
         {
 
 
             if (CurrentSheet.Range[$"B{CellNum}"].Value2!=null && Flag!=false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'B', LastCompany,index);
+                addCellForRow(CurrentSheet, CellNum, 'B', CurrentCompany, index);
             }
 
             if (CurrentSheet.Range[$"C{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'C', LastCompany, index);
+                addCellForRow(CurrentSheet, CellNum, 'C', CurrentCompany, index);
             }
 
             if (CurrentSheet.Range[$"D{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'D', LastCompany, index);
+                addCellForRow(CurrentSheet, CellNum, 'D', CurrentCompany, index);
             }
 
             if (CurrentSheet.Range[$"E{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'E', LastCompany, index);
+                addCellForRow(CurrentSheet, CellNum, 'E', CurrentCompany, index);
             }
             if (CurrentSheet.Range[$"F{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'F', LastCompany, index);
+                addCellForRow(CurrentSheet, CellNum, 'F', CurrentCompany, index);
             }
             if (CurrentSheet.Range[$"G{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'G', LastCompany, index);
+                addCellForRow(CurrentSheet, CellNum, 'G', CurrentCompany, index);
             }
             if (CurrentSheet.Range[$"H{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'H', LastCompany, index);
+                addCellForRow(CurrentSheet, CellNum, 'H', CurrentCompany, index);
             }
             if (CurrentSheet.Range[$"I{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'I', LastCompany, index);
+                addCellForRow(CurrentSheet, CellNum, 'I', CurrentCompany, index);
             }
 
             if(Flag!=false)
@@ -807,13 +1006,15 @@ namespace ExcelProject
 
         private void button2_Click(object sender, RibbonControlEventArgs e)
         {
+            CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
+
             Flag = true;
 
             CheckRequired();
 
             if (Flag == true)
             {
-                Periodic(CurrentSheet);
+                //Periodic(CurrentSheet);
                 Required_Nonperiodic_data(CurrentSheet);
                 NonPeriodic(CurrentSheet);
             }

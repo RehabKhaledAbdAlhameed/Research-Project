@@ -53,8 +53,8 @@
             // group1
             // 
             this.group1.Items.Add(this.button1);
-            this.group1.Items.Add(this.button2);
             this.group1.Items.Add(this.button3);
+            this.group1.Items.Add(this.button2);
             this.group1.Label = "First";
             this.group1.Name = "group1";
             // 
