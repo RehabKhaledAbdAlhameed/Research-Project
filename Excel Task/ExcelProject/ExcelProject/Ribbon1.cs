@@ -18,7 +18,8 @@ namespace ExcelProject
         Worksheet CurrentSheet;
         Company MyCompanyData=new Company();
         private bool Flag = true;bool IsThereLastPrice = false;bool Has_NonPeriodic_Data_Draft = false;
-        int index = 0;double OldTargetPrice = 0.0;
+        int index = 0;double OldTargetPrice = 0.0; int ListIndex = 4;
+
         ExcelModel db = new ExcelModel();
         Company CompanyDetails = new Company();
         Data_item items = new Data_item();
@@ -483,7 +484,7 @@ namespace ExcelProject
         {
             CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
 
-            Flag = true;
+            Flag = true;index = 0;ListIndex = 4;
 
             CheckRequired();
 
@@ -681,11 +682,16 @@ namespace ExcelProject
                         MessageBox.Show("Enter A Valid Value in Rating Cell");
 
                     }
-                    Rate = Rate.ToLower();
+               
+                Rate = Rate.ToLower();
+              /*  while (!Rate.Equals("neutral") || !Rate.Equals("sell") || !Rate.Equals("buy"))
+                {
+                    MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
 
-
-                    //Update current Data
-                    if (Has_NonPeriodic_Data_Draft)
+                }
+                */
+                //Update current Data
+                if (Has_NonPeriodic_Data_Draft)
                     {
                         MyData = List_NonPeriodic_DataDraft_Data[0];//Rating First Row
                         MyData.op_date = DateTime.Now.ToLocalTime();
@@ -878,7 +884,6 @@ namespace ExcelProject
                                    orderby x.Comp_id descending
                                    select x).FirstOrDefault();
             */
-            int ListIndex = 4;
             for (int i = 18; i < 55; i++)
             {
 
@@ -888,7 +893,7 @@ namespace ExcelProject
                 }
 
                 if (Flag != false)
-                    GetLists(i, CurrentSheet, MyCompanyData, ListIndex);
+                    GetLists(i, CurrentSheet, MyCompanyData);
                 else
                     return;
 
@@ -899,7 +904,7 @@ namespace ExcelProject
 
 
         #region Add Every cell for everyRow
-        void addCellForRow(Worksheet CurrentSheet, int CellNum, char CellChar, Company CurrentCompany, int index,int ListIndex)
+        void addCellForRow(Worksheet CurrentSheet, int CellNum, char CellChar, Company CurrentCompany, int index)
         {
             string cell = CurrentSheet?.Range[$"{CellChar}{CellNum}"].Value2?.ToString();
             if (Has_NonPeriodic_Data_Draft)
@@ -908,7 +913,6 @@ namespace ExcelProject
                 MyData.op_value = cell;
                 db.Entry(MyData).State = EntityState.Modified;
                 db.SaveChanges();
-
             }
             else
             {
@@ -940,43 +944,59 @@ namespace ExcelProject
         #endregion
 
         #region Get lists Function
-        private void GetLists(int CellNum, Worksheet CurrentSheet, Company CurrentCompany, int ListIndex)
+        private void GetLists(int CellNum, Worksheet CurrentSheet, Company CurrentCompany)
         {
 
             if (CurrentSheet.Range[$"B{CellNum}"].Value2!=null && Flag!=false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'B', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'B', CurrentCompany, index);
+                ListIndex++;
+
             }
 
             if (CurrentSheet.Range[$"C{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'C', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'C', CurrentCompany, index);
+                ListIndex++;
+
             }
 
             if (CurrentSheet.Range[$"D{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'D', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'D', CurrentCompany, index);
+                ListIndex++;
+
             }
 
             if (CurrentSheet.Range[$"E{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'E', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'E', CurrentCompany, index);
+                ListIndex++;
+
             }
             if (CurrentSheet.Range[$"F{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'F', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'F', CurrentCompany, index);
+                ListIndex++;
+
             }
             if (CurrentSheet.Range[$"G{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'G', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'G', CurrentCompany, index);
+                ListIndex++;
+
             }
             if (CurrentSheet.Range[$"H{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'H', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'H', CurrentCompany, index);
+                ListIndex++;
+
             }
             if (CurrentSheet.Range[$"I{CellNum}"].Value2 != null && Flag != false)
             {
-                addCellForRow(CurrentSheet, CellNum, 'I', CurrentCompany, index, ListIndex);
+                addCellForRow(CurrentSheet, CellNum, 'I', CurrentCompany, index);
+                ListIndex++;
+
             }
 
             if (Flag != false)
