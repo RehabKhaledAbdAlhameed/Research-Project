@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Res1.Views.Companies.CompanyDetailed" Title="{Binding Comp_Name}">
+    <ContentPage.Content>
+        <FlexLayout Direction="Column">
+
+            <Image Source="{Binding IMG_URL}" WidthRequest="100" HeightRequest="100"></Image>
+
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Name"  FontAttributes="Bold"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand" />
+                <Label Text="{Binding Comp_Name}" FontSize="Medium" FontAttributes="Italic"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+
+
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Reuters Code"  FontAttributes="Bold"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand" />
+                <Label Text="{Binding Reu_Code}" FontSize="Medium" FontAttributes="Italic"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+
+
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Industry"  FontAttributes="Bold"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand" />
+                <Label Text="{Binding Ind_id}" FontSize="Medium" FontAttributes="Italic"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+
+
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Sector"  FontAttributes="Bold"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand" />
+                <Label Text="{Binding Sec_id}" FontSize="Medium" FontAttributes="Italic"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+
+
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Currency"  FontAttributes="Bold"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand" />
+                <Label Text="{Binding Trd_Curr}" FontSize="Medium" FontAttributes="Italic"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+
+            <!--
+            <Button FlexLayout.AlignSelf="Center" FontSize="Medium"  Text="{Binding ReportPrice ,StringFormat='Get Report ({0})$'}" BackgroundColor="Blue"  TextColor="White" BorderRadius="8"></Button>-->
+        </FlexLayout>
+
+    </ContentPage.Content>
+</ContentPage>
