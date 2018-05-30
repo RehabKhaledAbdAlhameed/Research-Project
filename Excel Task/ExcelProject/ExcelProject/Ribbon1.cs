@@ -17,7 +17,7 @@ namespace ExcelProject
         #region Declarations
         Worksheet CurrentSheet;
         Company MyCompanyData=new Company();
-        private bool Flag = true;bool IsThereLastPrice = false;bool Has_NonPeriodic_Data_Draft = false;
+        private bool Flag = true;bool IsThereLastPrice = false;bool Has_NonPeriodic_Data_Draft = false; bool UploadBtnFlag = false;
         int index = 0;double OldTargetPrice = 0.0; int ListIndex = 4;
 
         ExcelModel db = new ExcelModel();
@@ -344,7 +344,8 @@ namespace ExcelProject
 
         private void button3_Click(object sender, RibbonControlEventArgs e)
         {
-            CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
+               UploadBtnFlag = true;
+               CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
 
             //string r = CurrentSheet.Range["B3"].Value?.ToString();
             if (CurrentSheet.Range["B3"].Value==null)
@@ -356,8 +357,8 @@ namespace ExcelProject
             }
             else
             {
-                float ReuterCode;
-                if (float.TryParse(CurrentSheet.Range["B3"].Value.ToString(), out ReuterCode))
+                string ReuterCode= CurrentSheet?.Range["B3"]?.Value?.ToString();
+                if (!string.IsNullOrEmpty(ReuterCode))//double.TryParse(CurrentSheet.Range["B3"].Value.ToString(), out ReuterCode)
                 {
 
                     MyCompanyData = db.Companies.FirstOrDefault(x => x.Reu_Code == ReuterCode);
@@ -486,23 +487,25 @@ namespace ExcelProject
 
             Flag = true;index = 0;ListIndex = 4;
 
-            CheckRequired();
+            if (List_NonPeriodic_DataDraft_Data?.Count != 0)
+            {
+                Has_NonPeriodic_Data_Draft = true;
+            }
+           
 
-            if (Flag == true)
+
+                CheckRequired();
+
+            if (Flag == true && UploadBtnFlag == true)
             {
                 //Periodic(CurrentSheet);
                 Required_Nonperiodic_data(CurrentSheet);
                 NonPeriodic(CurrentSheet);
-
+                UploadBtnFlag = false;
                 MessageBox.Show("All Data Saved Thanks ");
 
             }
-            /* else
-             {
-                 MessageBox.Show(" Follow all instructions please :) "); 
-             }*/
-
-            //db.SaveChanges();
+          
         }
 
 
@@ -534,7 +537,7 @@ namespace ExcelProject
                     string RouterCode3 = RouterCode2.Remove(RouterCode2.Length - 1, 1);
 
                     if (float.TryParse(RouterCode3, out r))
-                        CompanyDetails.Reu_Code = -r;
+                        CompanyDetails.Reu_Code = $"{-r}";
                     else
                         MessageBox.Show("Enter A valid Value between The brackets In Reuter Code Field");
 
@@ -542,7 +545,7 @@ namespace ExcelProject
                 }
 
                 else if (float.TryParse(RouterCode, out r))
-                    CompanyDetails.Reu_Code = r;
+                    CompanyDetails.Reu_Code = $"{-r}";
                 else
                 {
                     MessageBox.Show("Enter A real  valid Value In Reuter Code Field");
@@ -747,7 +750,12 @@ namespace ExcelProject
                         else if (Rate == "sell")
                         {
                             MyData.op_value = Rate;
-                            MyData.item_code = 36;//in table Data_item
+                            MyData.item_code = from i in db.Data_item
+                                               where i.item_desc=="Rate "
+
+
+
+                            //36;//in table Data_item
                             MyData.comp_id = int.Parse(CompanyID.ToString());
                             db.NonPeriodic_Data_Draft.Add(MyData);
 
@@ -762,17 +770,17 @@ namespace ExcelProject
                     #endregion
 
                     #region Target Price
-                    double targetPriceDouble;
-                    while (string.IsNullOrEmpty(targetPrice))
-                    {
-                        MessageBox.Show("Enter  a value in Target Price Cell please");
+                    double targetPriceDouble= double.Parse(targetPrice);
+                    //while (string.IsNullOrEmpty(targetPrice))
+                    //{
+                    //    MessageBox.Show("Enter  a value in Target Price Cell please");
 
-                    }
-                    while (!double.TryParse(targetPrice, out targetPriceDouble))
-                    {
-                        MessageBox.Show("Enter Valid Number in Target Price Cell please");
+                    //}
+                    //while (!double.TryParse(targetPrice, out targetPriceDouble))
+                    //{
+                    //    MessageBox.Show("Enter Valid Number in Target Price Cell please");
 
-                    }
+                    //}
                     if (IsThereLastPrice)
                     {/*
                 
@@ -781,16 +789,16 @@ namespace ExcelProject
                        */
 
 
-                        double PrecentageValue = OldTargetPrice * .1;
-                        double MaxValue = OldTargetPrice + PrecentageValue;
-                        double MinValue = OldTargetPrice - PrecentageValue;
+                    //    double PrecentageValue = OldTargetPrice * .1;
+                    //    double MaxValue = OldTargetPrice + PrecentageValue;
+                    //    double MinValue = OldTargetPrice - PrecentageValue;
 
-                    while(targetPriceDouble > MaxValue || targetPriceDouble < MinValue) {
+                    //if(targetPriceDouble > MaxValue || targetPriceDouble < MinValue) {
 
                        
-                        MessageBox.Show($"Target price should be between {MinValue} and {MaxValue} please");
+                    //    MessageBox.Show($"Target price should be between {MinValue} and {MaxValue} please");
 
-                    }//Target Price Second Row
+                    //}//Target Price Second Row
                     MyData = List_NonPeriodic_DataDraft_Data[1];
                     MyData.op_date = DateTime.Now.ToLocalTime();
                     MyData.op_value = targetPrice;
@@ -893,7 +901,8 @@ namespace ExcelProject
                 }
 
                 if (Flag != false)
-                    GetLists(i, CurrentSheet, MyCompanyData);
+                    GetLists(i, 
+                        , MyCompanyData);
                 else
                     return;
 
@@ -942,6 +951,7 @@ namespace ExcelProject
 
         }
         #endregion
+
 
         #region Get lists Function
         private void GetLists(int CellNum, Worksheet CurrentSheet, Company CurrentCompany)
@@ -1073,6 +1083,46 @@ namespace ExcelProject
                     }
                 }
             }
+
+
+
+            #region TargetPrice
+
+            double targetPriceDouble;
+            string targetPrice = CurrentSheet?.Range["B11"].Value?.ToString();
+
+            if (!double.TryParse(targetPrice, out targetPriceDouble))
+            {
+                MessageBox.Show("Enter Valid Number in Target Price Cell please");
+                Flag = false;
+                return;
+            }
+            if (IsThereLastPrice)
+                {/*
+                
+                           ex:OldTargetPrice=1000    =>  10% from 1000= 100
+                           then targetPriceDouble should be between 900 and 1100
+                           */
+
+
+                    double PrecentageValue = OldTargetPrice * .1;
+                    double MaxValue = OldTargetPrice + PrecentageValue;
+                    double MinValue = OldTargetPrice - PrecentageValue;
+
+                    if (targetPriceDouble > MaxValue || targetPriceDouble < MinValue)
+                    {
+
+
+                        MessageBox.Show($"Target price should be between {MinValue} and {MaxValue} please");
+                        Flag = false;
+                        return;
+
+                    }//Target Price Second Row
+                  
+
+
+                }
+            #endregion
         }
 
 

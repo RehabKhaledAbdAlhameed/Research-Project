@@ -172,6 +172,7 @@
     <Compile Include="Historical_Price.cs" />
     <Compile Include="Industry.cs" />
     <Compile Include="NonPeriodic_Data_Draft.cs" />
+    <Compile Include="NonPeriodic_Data_Live.cs" />
     <Compile Include="Periodic_Data_Draft.cs" />
     <Compile Include="Periodic_Date_Live.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -219,6 +220,9 @@
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="XMLFile1.xml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -8,7 +8,7 @@ namespace ExcelProject
     public partial class ExcelModel : DbContext
     {
         public ExcelModel()
-            : base("name=ExcelModel")
+            : base("name=ExcelModel1")
         {
         }
 
@@ -18,6 +18,7 @@ namespace ExcelProject
         public virtual DbSet<Historical_Price> Historical_Price { get; set; }
         public virtual DbSet<Industry> Industries { get; set; }
         public virtual DbSet<NonPeriodic_Data_Draft> NonPeriodic_Data_Draft { get; set; }
+        public virtual DbSet<NonPeriodic_Data_Live> NonPeriodic_Data_Live { get; set; }
         public virtual DbSet<Periodic_Data_Draft> Periodic_Data_Draft { get; set; }
         public virtual DbSet<Periodic_Date_Live> Periodic_Date_Live { get; set; }
         public virtual DbSet<Report> Reports { get; set; }
@@ -29,6 +30,10 @@ namespace ExcelProject
             modelBuilder.Entity<Company>()
                 .Property(e => e.Comp_Name)
                 .IsFixedLength();
+
+            modelBuilder.Entity<Company>()
+                .Property(e => e.Reu_Code)
+                .IsUnicode(false);
 
             modelBuilder.Entity<Company>()
                 .Property(e => e.Trd_Curr)
