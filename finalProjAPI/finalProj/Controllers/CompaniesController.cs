@@ -42,7 +42,7 @@ namespace finalProj.Controllers
 
             }
         }
-        [HttpPost]
+        [HttpGet]
         public CompanyType GetCompany(int id)
         {
             using (DBDataModel db = new DBDataModel())
