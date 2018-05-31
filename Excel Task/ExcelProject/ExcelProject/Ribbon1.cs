@@ -15,6 +15,7 @@ namespace ExcelProject
     {
 
         #region Declarations
+        int RateCode = 1003, TargetPriceCode = 1004, ITCode = 1005, VRCode = 1005;
         Worksheet CurrentSheet;
         Company MyCompanyData=new Company();
         private bool Flag = true;bool IsThereLastPrice = false;bool Has_NonPeriodic_Data_Draft = false; bool UploadBtnFlag = false;
@@ -402,13 +403,13 @@ namespace ExcelProject
             if (List_NonPeriodic_DataDraft_Data?.Count != 0)
             {
                 Has_NonPeriodic_Data_Draft = true;
-                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 36);//Rating
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == RateCode);//Rating
                 if (!string.IsNullOrEmpty(MyData?.op_value))
                 {
                     CurrentSheet.Range["B10"].Value2 = MyData.op_value;
 
                 }
-                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 37);//Target Price
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == TargetPriceCode);//Target Price
                 if (!string.IsNullOrEmpty(MyData?.op_value))
                 {
                     IsThereLastPrice = true;
@@ -416,13 +417,13 @@ namespace ExcelProject
                     CurrentSheet.Range["B11"].Value2 = MyData.op_value;
 
                 }
-                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 38);//Investment Thesis(Text)
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == ITCode);//Investment Thesis(Text)
                 if (!string.IsNullOrEmpty(MyData?.op_value))
                 {
                     CurrentSheet.Range["B12"].Value2 = MyData.op_value;
 
                 }
-                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == 39);//Valuation and Risks (Text)
+                MyData = List_NonPeriodic_DataDraft_Data.FirstOrDefault(item => item.item_code == VRCode);//Valuation and Risks (Text)
                 if (!string.IsNullOrEmpty(MyData?.op_value))
                 {
                     CurrentSheet.Range["B13"].Value2 = MyData.op_value;
@@ -726,7 +727,7 @@ namespace ExcelProject
                     if (Rate == "neutral" || Rate == "buy" || Rate == "sell")
                         {
                             MyData.op_value = Rate;
-                            MyData.item_code = 1003;
+                            MyData.item_code = RateCode;
                             MyData.comp_id = int.Parse(CompanyID.ToString());
                             db.NonPeriodic_Data_Draft.Add(MyData);
 
@@ -784,7 +785,7 @@ namespace ExcelProject
                     {
                     MyData.op_date = DateTime.Now.ToLocalTime();
                     MyData.op_value = targetPrice;
-                    MyData.item_code = 1004;//in table Data_item
+                    MyData.item_code = TargetPriceCode;//in table Data_item
                     MyData.comp_id = int.Parse(CompanyID.ToString());
                     db.NonPeriodic_Data_Draft.Add(MyData);
                 }
@@ -813,7 +814,7 @@ namespace ExcelProject
                     {
                         MyData.op_value = inv_tehs;
                         MyData.op_date = DateTime.Now.ToLocalTime();
-                        MyData.item_code = 1005;//in table Data_item
+                        MyData.item_code = ITCode;//in table Data_item
                         MyData.comp_id = int.Parse(CompanyID.ToString());
                         db.NonPeriodic_Data_Draft.Add(MyData);
                     }
@@ -841,7 +842,7 @@ namespace ExcelProject
                     {
                         MyData.op_value = valrisks;
                         MyData.op_date = DateTime.Now.ToLocalTime();
-                        MyData.item_code = 1006;//in table Data_item
+                        MyData.item_code = VRCode;//in table Data_item
                         MyData.comp_id = int.Parse(CompanyID.ToString());
                         db.NonPeriodic_Data_Draft.Add(MyData);
                     }
@@ -886,63 +887,64 @@ namespace ExcelProject
         #region Get lists Function
         private void GetLists(int RowNum, Worksheet CurrentSheet, Company CurrentCompany)
         {
-
-            if (CurrentSheet.Range[$"B{RowNum}"].Value2 != null && Flag != false)
-            {
+            //Data can be Empty for some cells , it's ok 
+            //if (CurrentSheet.Range[$"B{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'B', CurrentCompany, index);
                 ListIndex++;
 
-            }
+            //}
 
-            if (CurrentSheet.Range[$"C{RowNum}"].Value2 != null && Flag != false)
-            {
+            //if (CurrentSheet.Range[$"C{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'C', CurrentCompany, index);
                 ListIndex++;
 
-            }
+            //}
 
-            if (CurrentSheet.Range[$"D{RowNum}"].Value2 != null && Flag != false)
-            {
+            //if (CurrentSheet.Range[$"D{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'D', CurrentCompany, index);
                 ListIndex++;
 
-            }
+            //}
 
-            if (CurrentSheet.Range[$"E{RowNum}"].Value2 != null && Flag != false)
-            {
+            //if (CurrentSheet.Range[$"E{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'E', CurrentCompany, index);
                 ListIndex++;
 
-            }
-            if (CurrentSheet.Range[$"F{RowNum}"].Value2 != null && Flag != false)
-            {
+            //}
+            //if (CurrentSheet.Range[$"F{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'F', CurrentCompany, index);
                 ListIndex++;
 
-            }
-            if (CurrentSheet.Range[$"G{RowNum}"].Value2 != null && Flag != false)
-            {
+            //}
+            //if (CurrentSheet.Range[$"G{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'G', CurrentCompany, index);
                 ListIndex++;
 
-            }
-            if (CurrentSheet.Range[$"H{RowNum}"].Value2 != null && Flag != false)
-            {
+            //}
+            //if (CurrentSheet.Range[$"H{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'H', CurrentCompany, index);
                 ListIndex++;
 
-            }
-            if (CurrentSheet.Range[$"I{RowNum}"].Value2 != null && Flag != false)
-            {
+            //}
+            //if (CurrentSheet.Range[$"I{RowNum}"].Value2 != null && Flag != false)
+            //{
                 addCellForRow(CurrentSheet, RowNum, 'I', CurrentCompany, index);
                 ListIndex++;
 
-            }
+            //}
 
-            if (Flag != false)
-            {
-                index++;
-            }
+            index++;
+            //Index (Number of Rows) to use it in   :             
+            //MyData.item_code = db.Data_item.ToList()[index].item_code ;//DataItems[index].item_code;
+
+
         }
         #endregion
 
@@ -963,8 +965,8 @@ namespace ExcelProject
 
                 MyData.op_value = cell;
                 DateTime date;
-                if (DateTime.TryParse(CurrentSheet.Range[$"{CellChar}{16}"].Value2.ToString(), out date))
-                    MyData.op_date = date;
+                //if (DateTime.TryParse(CurrentSheet.Range[$"{CellChar}{16}"].Value2.ToString(), out date))
+                //    MyData.op_date = date;
 
                 MyData.op_date = DateTime.ParseExact(CurrentSheet.Range[$"{CellChar}{16}"].Value2.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
