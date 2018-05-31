@@ -19,8 +19,8 @@ namespace finalProj.Models
 
         public int comp_id { get; set; }
 
-        public virtual Company Company { get; set; }
+        public  Company Company { get; set; }
 
-        public virtual Data_item Data_item { get; set; }
+        public  Data_item Data_item { get; set; }
     }
 }
