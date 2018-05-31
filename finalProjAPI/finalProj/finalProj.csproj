@@ -209,6 +209,7 @@
     <Compile Include="Models\Periodic_Data_Draft.cs" />
     <Compile Include="Models\Periodic_Date_Live.cs" />
     <Compile Include="Models\Report.cs" />
+    <Compile Include="Models\SectorType.cs" />
     <Compile Include="Models\Sector.cs" />
     <Compile Include="Models\sysdiagram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

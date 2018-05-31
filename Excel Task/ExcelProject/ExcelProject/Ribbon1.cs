@@ -505,7 +505,11 @@ namespace ExcelProject
                 MessageBox.Show("All Data Saved Thanks ");
 
             }
-          
+            else
+            {
+                MessageBox.Show("Follow all instructions please :) "); 
+            }
+
         }
 
 
@@ -687,49 +691,49 @@ namespace ExcelProject
                     }
                
                 Rate = Rate.ToLower();
-              /*  while (!Rate.Equals("neutral") || !Rate.Equals("sell") || !Rate.Equals("buy"))
-                {
-                    MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
+                /*  while (!Rate.Equals("neutral") || !Rate.Equals("sell") || !Rate.Equals("buy"))
+                  {
+                      MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
 
-                }
-                */
+                  }
+                  */
                 //Update current Data
                 if (Has_NonPeriodic_Data_Draft)
+                {
+                    MyData = List_NonPeriodic_DataDraft_Data[0];//Rating First Row
+                    MyData.op_date = DateTime.Now.ToLocalTime();
+                    if (Rate == "neutral")
                     {
-                        MyData = List_NonPeriodic_DataDraft_Data[0];//Rating First Row
-                        MyData.op_date = DateTime.Now.ToLocalTime();
-                        if (Rate == "neutral")
-                        {
-                            
-                            MyData.op_value = Rate;
-                            db.Entry(MyData).State = EntityState.Modified;
+
+                        MyData.op_value = Rate;
+                        db.Entry(MyData).State = EntityState.Modified;
 
 
                     }
                     else if (Rate == "buy")
-                        {
-                            MyData.op_value = Rate;
-                            db.Entry(MyData).State = EntityState.Modified;
+                    {
+                        MyData.op_value = Rate;
+                        db.Entry(MyData).State = EntityState.Modified;
                     }
-                        else if (Rate == "sell")
-                        {
-                            MyData.op_value = Rate;
-                            db.Entry(MyData).State = EntityState.Modified;
+                    else if (Rate == "sell")
+                    {
+                        MyData.op_value = Rate;
+                        db.Entry(MyData).State = EntityState.Modified;
 
                     }
-                    else
-                        {
-                            MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
-                        }
-
-                    }
-
-                    //Add New
                     else
                     {
+                        MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
+                    }
+
+                }
+
+                //Add New
+                else
+                {
                     MyData.op_date = DateTime.Now.ToLocalTime();
 
-                    if (Rate == "neutral")
+                    if (Rate == "neutral" || Rate == "buy" || Rate == "sell")
                         {
                             MyData.op_value = Rate;
                             MyData.item_code = 36;
@@ -737,29 +741,7 @@ namespace ExcelProject
                             db.NonPeriodic_Data_Draft.Add(MyData);
 
                         }
-                        else if (Rate == "buy")
-                        {
-
-                            MyData.op_value = Rate;
-                            MyData.item_code = 36;
-                            MyData.comp_id = int.Parse(CompanyID.ToString());
-                            db.NonPeriodic_Data_Draft.Add(MyData);
-
-
-                        }
-                        else if (Rate == "sell")
-                        {
-                            MyData.op_value = Rate;
-                            MyData.item_code = from i in db.Data_item
-                                               where i.item_desc=="Rate "
-
-
-
-                            //36;//in table Data_item
-                            MyData.comp_id = int.Parse(CompanyID.ToString());
-                            db.NonPeriodic_Data_Draft.Add(MyData);
-
-                        }
+                    
                         else
                         {
                             MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
@@ -901,8 +883,7 @@ namespace ExcelProject
                 }
 
                 if (Flag != false)
-                    GetLists(i, 
-                        , MyCompanyData);
+                    GetLists(i, CurrentSheet , MyCompanyData);
                 else
                     return;
 
