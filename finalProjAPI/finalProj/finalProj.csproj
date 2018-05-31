@@ -186,13 +186,11 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IndCompController.cs" />
+    <Compile Include="Controllers\IndustriesController.cs" />
     <Compile Include="Controllers\NonPeriodicController.cs" />
     <Compile Include="Controllers\OneYearBackwardController.cs" />
     <Compile Include="Controllers\reportsController.cs" />
-    <Compile Include="Controllers\SectorsCompanyController.cs" />
-    <Compile Include="Controllers\sectorsController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\SectorsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -204,14 +202,14 @@
     <Compile Include="Models\DBDataModel.cs" />
     <Compile Include="Models\Historical_Price.cs" />
     <Compile Include="Models\Industry.cs" />
+    <Compile Include="Models\IndustryType.cs" />
     <Compile Include="Models\NonPeriodic_Data_Draft.cs" />
     <Compile Include="Models\NonPeriodic_Data_Live.cs" />
     <Compile Include="Models\Periodic_Data_Draft.cs" />
     <Compile Include="Models\Periodic_Date_Live.cs" />
     <Compile Include="Models\Report.cs" />
-    <Compile Include="Models\SectorType.cs" />
     <Compile Include="Models\Sector.cs" />
-    <Compile Include="Models\sysdiagram.cs" />
+    <Compile Include="Models\SectorType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

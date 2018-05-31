@@ -26,7 +26,8 @@ namespace finalProj.Models
         [StringLength(100)]
         public string Comp_Name { get; set; }
 
-        public double Reu_Code { get; set; }
+        [Required]
+        public string Reu_Code { get; set; }
 
         [StringLength(10)]
         public string Trd_Curr { get; set; }

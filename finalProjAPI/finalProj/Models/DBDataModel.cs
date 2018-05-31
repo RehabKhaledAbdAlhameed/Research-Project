@@ -23,7 +23,6 @@ namespace finalProj.Models
         public virtual DbSet<Periodic_Date_Live> Periodic_Date_Live { get; set; }
         public virtual DbSet<Report> Reports { get; set; }
         public virtual DbSet<Sector> Sectors { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -31,9 +30,9 @@ namespace finalProj.Models
                 .Property(e => e.Comp_Name)
                 .IsFixedLength();
 
-            //modelBuilder.Entity<Company>()
-            //    .Property(e => e.Reu_Code)
-            //    .IsUnicode(false);
+            modelBuilder.Entity<Company>()
+                .Property(e => e.Reu_Code)
+                .IsUnicode(false);
 
             modelBuilder.Entity<Company>()
                 .Property(e => e.Trd_Curr)
