@@ -34,6 +34,6 @@ namespace finalProj.Models
 
         public int comp_id { get; set; }
 
-        public virtual Company Company { get; set; }
+        public  Company Company { get; set; }
     }
 }

@@ -28,6 +28,6 @@ namespace finalProj.Models
         public string Sec_Desc { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Company> Companies { get; set; }
+        public  ICollection<Company> Companies { get; set; }
     }
 }

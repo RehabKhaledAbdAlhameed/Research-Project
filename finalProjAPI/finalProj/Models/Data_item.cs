@@ -33,12 +33,12 @@ namespace finalProj.Models
         public virtual Data_type Data_type { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NonPeriodic_Data_Draft> NonPeriodic_Data_Draft { get; set; }
+        public  ICollection<NonPeriodic_Data_Draft> NonPeriodic_Data_Draft { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Periodic_Data_Draft> Periodic_Data_Draft { get; set; }
+        public  ICollection<Periodic_Data_Draft> Periodic_Data_Draft { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Periodic_Date_Live> Periodic_Date_Live { get; set; }
+        public  ICollection<Periodic_Date_Live> Periodic_Date_Live { get; set; }
     }
 }

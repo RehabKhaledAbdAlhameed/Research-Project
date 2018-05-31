@@ -22,6 +22,6 @@ namespace finalProj.Models
         public string type_name { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Data_item> Data_item { get; set; }
+        public  ICollection<Data_item> Data_item { get; set; }
     }
 }

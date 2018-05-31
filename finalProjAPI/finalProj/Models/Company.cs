@@ -45,23 +45,23 @@ namespace finalProj.Models
 
         public int Ind_id { get; set; }
 
-        public virtual Industry Industry { get; set; }
+        public  Industry Industry { get; set; }
 
-        public virtual Sector Sector { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Historical_Price> Historical_Price { get; set; }
+        public  Sector Sector { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NonPeriodic_Data_Draft> NonPeriodic_Data_Draft { get; set; }
+        public  ICollection<Historical_Price> Historical_Price { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Periodic_Data_Draft> Periodic_Data_Draft { get; set; }
+        public ICollection<NonPeriodic_Data_Draft> NonPeriodic_Data_Draft { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Periodic_Date_Live> Periodic_Date_Live { get; set; }
+        public  ICollection<Periodic_Data_Draft> Periodic_Data_Draft { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Report> Reports { get; set; }
+        public  ICollection<Periodic_Date_Live> Periodic_Date_Live { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public ICollection<Report> Reports { get; set; }
     }
 }

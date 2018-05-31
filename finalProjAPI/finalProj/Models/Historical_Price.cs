@@ -18,6 +18,6 @@ namespace finalProj.Models
         [Column(TypeName = "money")]
         public decimal Price_val { get; set; }
 
-        public virtual Company Company { get; set; }
+        public  Company Company { get; set; }
     }
 }
