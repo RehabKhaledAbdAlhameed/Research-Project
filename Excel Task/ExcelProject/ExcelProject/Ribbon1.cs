@@ -18,7 +18,7 @@ namespace ExcelProject
         Worksheet CurrentSheet;
         Company MyCompanyData=new Company();
         private bool Flag = true;bool IsThereLastPrice = false;bool Has_NonPeriodic_Data_Draft = false; bool UploadBtnFlag = false;
-        int index = 0;double OldTargetPrice = 0.0; int ListIndex = 4;
+        int index = 0;double OldTargetPrice = 0.0; int ListIndex = 0;
 
         ExcelModel db = new ExcelModel();
         Company CompanyDetails = new Company();
@@ -684,11 +684,11 @@ namespace ExcelProject
                 
                     #region Rate
 
-                while (string.IsNullOrEmpty(Rate))
-                    {
-                        MessageBox.Show("Enter A Valid Value in Rating Cell");
+                  //while (string.IsNullOrEmpty(Rate))
+                  //  {
+                  //      MessageBox.Show("Enter A Valid Value in Rating Cell");
 
-                    }
+                  //  }
                
                 Rate = Rate.ToLower();
                 /*  while (!Rate.Equals("neutral") || !Rate.Equals("sell") || !Rate.Equals("buy"))
@@ -702,7 +702,7 @@ namespace ExcelProject
                 {
                     MyData = List_NonPeriodic_DataDraft_Data[0];//Rating First Row
                     MyData.op_date = DateTime.Now.ToLocalTime();
-                    if (Rate == "neutral")
+                    if (Rate == "neutral" || Rate == "buy"|| Rate == "sell")
                     {
 
                         MyData.op_value = Rate;
@@ -710,17 +710,7 @@ namespace ExcelProject
 
 
                     }
-                    else if (Rate == "buy")
-                    {
-                        MyData.op_value = Rate;
-                        db.Entry(MyData).State = EntityState.Modified;
-                    }
-                    else if (Rate == "sell")
-                    {
-                        MyData.op_value = Rate;
-                        db.Entry(MyData).State = EntityState.Modified;
-
-                    }
+            
                     else
                     {
                         MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
@@ -736,7 +726,7 @@ namespace ExcelProject
                     if (Rate == "neutral" || Rate == "buy" || Rate == "sell")
                         {
                             MyData.op_value = Rate;
-                            MyData.item_code = 36;
+                            MyData.item_code = 1003;
                             MyData.comp_id = int.Parse(CompanyID.ToString());
                             db.NonPeriodic_Data_Draft.Add(MyData);
 
@@ -794,7 +784,7 @@ namespace ExcelProject
                     {
                     MyData.op_date = DateTime.Now.ToLocalTime();
                     MyData.op_value = targetPrice;
-                    MyData.item_code = 37;//in table Data_item
+                    MyData.item_code = 1004;//in table Data_item
                     MyData.comp_id = int.Parse(CompanyID.ToString());
                     db.NonPeriodic_Data_Draft.Add(MyData);
                 }
@@ -823,7 +813,7 @@ namespace ExcelProject
                     {
                         MyData.op_value = inv_tehs;
                         MyData.op_date = DateTime.Now.ToLocalTime();
-                        MyData.item_code = 38;//in table Data_item
+                        MyData.item_code = 1005;//in table Data_item
                         MyData.comp_id = int.Parse(CompanyID.ToString());
                         db.NonPeriodic_Data_Draft.Add(MyData);
                     }
@@ -851,7 +841,7 @@ namespace ExcelProject
                     {
                         MyData.op_value = valrisks;
                         MyData.op_date = DateTime.Now.ToLocalTime();
-                        MyData.item_code = 39;//in table Data_item
+                        MyData.item_code = 1006;//in table Data_item
                         MyData.comp_id = int.Parse(CompanyID.ToString());
                         db.NonPeriodic_Data_Draft.Add(MyData);
                     }
@@ -874,21 +864,85 @@ namespace ExcelProject
                                    orderby x.Comp_id descending
                                    select x).FirstOrDefault();
             */
-            for (int i = 18; i < 55; i++)
+            for (int row = 18;row < 55; row++)
             {
 
-                if (i==21||i==25||i==35||i==42||i==47||i==52)
+                if (row == 21|| row == 25|| row == 35|| row == 42|| row == 47|| row == 52)
                 {
                     continue;
                 }
 
                 if (Flag != false)
-                    GetLists(i, CurrentSheet , MyCompanyData);
+                    GetLists(row, CurrentSheet , MyCompanyData);
                 else
                     return;
 
             }
 
+        }
+        #endregion
+
+
+        #region Get lists Function
+        private void GetLists(int RowNum, Worksheet CurrentSheet, Company CurrentCompany)
+        {
+
+            if (CurrentSheet.Range[$"B{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'B', CurrentCompany, index);
+                ListIndex++;
+
+            }
+
+            if (CurrentSheet.Range[$"C{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'C', CurrentCompany, index);
+                ListIndex++;
+
+            }
+
+            if (CurrentSheet.Range[$"D{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'D', CurrentCompany, index);
+                ListIndex++;
+
+            }
+
+            if (CurrentSheet.Range[$"E{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'E', CurrentCompany, index);
+                ListIndex++;
+
+            }
+            if (CurrentSheet.Range[$"F{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'F', CurrentCompany, index);
+                ListIndex++;
+
+            }
+            if (CurrentSheet.Range[$"G{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'G', CurrentCompany, index);
+                ListIndex++;
+
+            }
+            if (CurrentSheet.Range[$"H{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'H', CurrentCompany, index);
+                ListIndex++;
+
+            }
+            if (CurrentSheet.Range[$"I{RowNum}"].Value2 != null && Flag != false)
+            {
+                addCellForRow(CurrentSheet, RowNum, 'I', CurrentCompany, index);
+                ListIndex++;
+
+            }
+
+            if (Flag != false)
+            {
+                index++;
+            }
         }
         #endregion
 
@@ -934,69 +988,6 @@ namespace ExcelProject
         #endregion
 
 
-        #region Get lists Function
-        private void GetLists(int CellNum, Worksheet CurrentSheet, Company CurrentCompany)
-        {
-
-            if (CurrentSheet.Range[$"B{CellNum}"].Value2!=null && Flag!=false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'B', CurrentCompany, index);
-                ListIndex++;
-
-            }
-
-            if (CurrentSheet.Range[$"C{CellNum}"].Value2 != null && Flag != false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'C', CurrentCompany, index);
-                ListIndex++;
-
-            }
-
-            if (CurrentSheet.Range[$"D{CellNum}"].Value2 != null && Flag != false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'D', CurrentCompany, index);
-                ListIndex++;
-
-            }
-
-            if (CurrentSheet.Range[$"E{CellNum}"].Value2 != null && Flag != false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'E', CurrentCompany, index);
-                ListIndex++;
-
-            }
-            if (CurrentSheet.Range[$"F{CellNum}"].Value2 != null && Flag != false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'F', CurrentCompany, index);
-                ListIndex++;
-
-            }
-            if (CurrentSheet.Range[$"G{CellNum}"].Value2 != null && Flag != false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'G', CurrentCompany, index);
-                ListIndex++;
-
-            }
-            if (CurrentSheet.Range[$"H{CellNum}"].Value2 != null && Flag != false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'H', CurrentCompany, index);
-                ListIndex++;
-
-            }
-            if (CurrentSheet.Range[$"I{CellNum}"].Value2 != null && Flag != false)
-            {
-                addCellForRow(CurrentSheet, CellNum, 'I', CurrentCompany, index);
-                ListIndex++;
-
-            }
-
-            if (Flag != false)
-            {
-                index++;
-            }
-        }
-        #endregion
-
 
         private void CheckRequired()
         {
@@ -1024,7 +1015,7 @@ namespace ExcelProject
                             Flag = false;
                             MessageBox.Show("Enter All Required Fields Please :)");
                            
-                            break;
+                            return;
 
                         }
 
@@ -1059,11 +1050,55 @@ namespace ExcelProject
 
                                 return;
                             }
+
+                            if (r == 18)
+                            {
+
+                            }
+                        
                         }
+                      
 
                     }
                 }
-            }
+
+
+                for (int r = 10; r <= 13; r++)
+                {
+                    if (Flag == false)
+                        return;
+                  
+
+
+                    string v = ((Microsoft.Office.Interop.Excel.Range)area[r, 2]).Value2?.ToString();
+
+                    if (!string.IsNullOrEmpty(v))
+                    {
+                          
+
+                        if (r == 10)
+                        {
+                                if (v == "neutral" || v == "buy" || v == "sell")
+                                {
+                              
+                                }
+
+                                else
+                                {
+                                    MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
+                                }
+                        }
+
+
+                    }
+                    else
+                    {
+                        Flag = false;
+                        MessageBox.Show("Enter All Required Fields Please :)");
+                        return;
+                    }
+     }
+  }
 
 
 
