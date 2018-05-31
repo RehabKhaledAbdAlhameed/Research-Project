@@ -46,7 +46,7 @@ namespace ExcelProject
         {
             CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet(); 
             #region A1
-            CurrentSheet.Range["A1"].Value = "Refernce Data";
+            CurrentSheet.Range["A1"].Value= "Refernce Data";
             CurrentSheet.Range["A1"].Font.Bold = true;
             #endregion
             #region A2
@@ -447,7 +447,7 @@ namespace ExcelProject
             {
                 Microsoft.Office.Interop.Excel.Worksheet activeSheet = Globals.ThisAddIn.Application.ActiveSheet;
                 Microsoft.Office.Interop.Excel.Range Range_ = activeSheet.UsedRange;
-                int index = 4;//Skip 4 rows (Rating,Target Price,Investment Thesis(Text),Valuation and Risks (Text)
+                int _index = 4; //skip first 4 rows (Rating,Target Price,Investment Thesis(Text),Valuation and Risks (Text)
                 for (int a = 1; a <= Range_.Areas.Count; a++)
                 {
                     Microsoft.Office.Interop.Excel.Range area = Range_.Areas[a];
@@ -457,14 +457,23 @@ namespace ExcelProject
 
                         for (int c = 2; c <= 9; c++)
                         { // Cell value 
-                            if (r == 21 || r == 25 || r == 29 || r == 30 || r == 34 || r == 35 || r == 38 || r == 42 || r == 44 || r == 45 || r == 47 || r == 52)
+                            if (r == 21 ||r == 35 || r == 25 || r == 42  || r == 47 || r == 52)
                             {
                                 continue;
                             }
+                            // if (index < List_NonPeriodic_DataDraft_Data.Count&&!string.IsNullOrEmpty(List_NonPeriodic_DataDraft_Data[index++].op_value)) { 
+                            string value = List_NonPeriodic_DataDraft_Data[_index++].op_value;
+                            if (value!=null &&value.StartsWith("-"))
+                            {
+                                string value2 = value.Remove(0, 1);
+                                ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2 = $"({value2})";
 
-                           ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2 = List_NonPeriodic_DataDraft_Data[index++].op_value;
-
-
+                            }
+                            else
+                            {
+                                ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2 = value;
+                            }
+                          
 
 
                         }
@@ -1024,10 +1033,10 @@ namespace ExcelProject
                         string v = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2.ToString();
                         if (v.Any(x=>x=='-'))
                         {
-                            Flag = false;
-                            MessageBox.Show("Enter Positive Number Please");
+                            //Flag = false;
+                            //MessageBox.Show("Enter Positive Number Please");
                             
-                            return;
+                            //return;
                         }
 
                     }
@@ -1047,16 +1056,12 @@ namespace ExcelProject
                         {
                             if (v.Any(x => x == '-'))
                             {
-                                Flag = false;
-                                MessageBox.Show("Enter Positive Number Please");
+                                //Flag = false;
+                                //MessageBox.Show("Enter Positive Number Please");
 
-                                return;
+                                //return;
                             }
-
-                            if (r == 18)
-                            {
-
-                            }
+                            
                         
                         }
                       
@@ -1087,8 +1092,10 @@ namespace ExcelProject
 
                                 else
                                 {
+                                    Flag = false;
                                     MessageBox.Show("Rating Value Should be (Neutral or Buy or Sell");
-                                }
+                                    return;
+                            }
                         }
 
 
