@@ -43,6 +43,7 @@ namespace finalProj.Controllers
             }
         }
         [HttpGet]
+       // [Route("compid")]
         public CompanyType GetCompany(int id)
         {
             using (DBDataModel db = new DBDataModel())
@@ -54,7 +55,7 @@ namespace finalProj.Controllers
                                {
                                    Comp_id = c.Comp_id,
                                    Comp_Name = c.Comp_Name,
-                                //   Reu_Code = c.Reu_Code,
+                                   Reu_Code = c.Reu_Code,
                                    Com_Country = c.Com_Country,
                                    Trd_Curr = c.Trd_Curr,
                                    Curr_Out_Shares = (decimal)c.Curr_Out_Shares,

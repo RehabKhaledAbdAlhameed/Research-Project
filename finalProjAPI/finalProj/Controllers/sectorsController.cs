@@ -22,7 +22,6 @@ namespace finalProj.Controllers
                                select new SectorType
                                {
                                    Sec_id=s.Sec_id,
-
                                    Sec_Name = s.Sec_Name,
                                    Sec_Desc=s.Sec_Desc,
                                    IMG_URL=s.IMG_URL,
@@ -38,7 +37,7 @@ namespace finalProj.Controllers
         // GET api/<controller>
         [HttpGet]
         [Route("SectorCompanies")]
-        public List<Sector> Get()
+        public List<Sector> GetCompanies()
         {
             using (DBDataModel db = new DBDataModel())
             {

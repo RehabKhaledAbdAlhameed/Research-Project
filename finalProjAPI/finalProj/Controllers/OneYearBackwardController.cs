@@ -12,12 +12,10 @@ namespace finalProj.Controllers
 {
     public class OneYearBackwardController : ApiController
     {
-        // GET api/<controller>
-       
 
         // GET api/<controller>/5
-        
-        public List<CompPrice> Get(int compid1)
+      [HttpGet]
+        public List<CompPrice> GetOneYearBackward(int compid1)
         {
             using (DBDataModel db = new DBDataModel())
             {

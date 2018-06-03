@@ -11,19 +11,19 @@ namespace finalProj.Controllers
     public class NonPeriodicController : ApiController
     {
         [HttpGet]
-        public IEnumerable<Periodic_Date_Live> get ()
+        public IEnumerable<NonPeriodic_Data_Live> get ()
         {
             using (DBDataModel db = new DBDataModel() )
             {
-                return db.Periodic_Date_Live.ToList();
+                return db.NonPeriodic_Data_Live.ToList();
             }
         }
         // [HttpPost]
-        public Periodic_Date_Live get( int ID)
+        public NonPeriodic_Data_Live get( int ID)
         {
             using (DBDataModel db = new DBDataModel())
             {
-                return db.Periodic_Date_Live.FirstOrDefault(c => c.ID == ID);
+                return db.NonPeriodic_Data_Live.FirstOrDefault(c => c.comp_id == ID);
             }
         }
     }

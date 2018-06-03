@@ -35,5 +35,16 @@ namespace finalProj.Controllers
                 return result;
             }
         }
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("IndustryCompanies")]
+        public List<Industry> GetCompanies()
+        {
+            using (DBDataModel db = new DBDataModel())
+            {
+                var a = db.Industries.Include(c => c.Companies).ToList();
+
+                return a;
+            }
+        }
     }
 }
