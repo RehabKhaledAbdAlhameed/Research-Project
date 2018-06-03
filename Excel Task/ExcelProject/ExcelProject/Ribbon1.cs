@@ -18,7 +18,7 @@ namespace ExcelProject
         int RateCode = 1003, TargetPriceCode = 1004, ITCode = 1005, VRCode = 1005;
         Worksheet CurrentSheet;
         Company MyCompanyData=new Company();
-        private bool Flag = true;bool IsThereLastPrice = false;bool Has_NonPeriodic_Data_Draft = false; bool UploadBtnFlag = false;
+        private bool Flag = true;bool IsThereLastPrice = false, IsTemplateCreated = false, Has_NonPeriodic_Data_Draft = false; bool UploadBtnFlag = false;
         int index = 0;double OldTargetPrice = 0.0; int ListIndex = 0;
 
         ExcelModel db = new ExcelModel();
@@ -44,6 +44,11 @@ namespace ExcelProject
 
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
+            if (IsTemplateCreated)
+            {
+                MessageBox.Show("Your Template Already created");
+                return;
+            }
             CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet(); 
             #region A1
             CurrentSheet.Range["A1"].Value= "Refernce Data";
@@ -337,6 +342,8 @@ namespace ExcelProject
 
 
             CurrentSheet.Columns.AutoFit();
+            IsTemplateCreated = true;
+
 
         }
         #endregion
@@ -1020,7 +1027,7 @@ namespace ExcelProject
                             continue;
                         }
 
-                        //CellValue = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2;
+                       //CellValue = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2;
                         if (((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2 == null)
                         {
                             Flag = false;
@@ -1085,6 +1092,7 @@ namespace ExcelProject
 
                         if (r == 10)
                         {
+                                v = v.ToLower();
                                 if (v == "neutral" || v == "buy" || v == "sell")
                                 {
                               
