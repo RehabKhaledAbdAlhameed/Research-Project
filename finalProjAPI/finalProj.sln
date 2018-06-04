@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "finalProj", "finalProj\finalProj.csproj", "{9C93FB24-7D26-4CF2-AC31-A20F876044CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Res1.UWP", "..\..\..\Res1\Res1\Res1.UWP\Res1.UWP.csproj", "{02C37316-6CB9-4101-AC68-8B44BC00E3A8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,26 +33,6 @@ Global
 		{9C93FB24-7D26-4CF2-AC31-A20F876044CF}.Release|x64.Build.0 = Release|Any CPU
 		{9C93FB24-7D26-4CF2-AC31-A20F876044CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{9C93FB24-7D26-4CF2-AC31-A20F876044CF}.Release|x86.Build.0 = Release|Any CPU
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|ARM.ActiveCfg = Debug|ARM
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|ARM.Build.0 = Debug|ARM
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|ARM.Deploy.0 = Debug|ARM
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|x64.ActiveCfg = Debug|x64
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|x64.Build.0 = Debug|x64
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|x64.Deploy.0 = Debug|x64
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|x86.ActiveCfg = Debug|x86
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|x86.Build.0 = Debug|x86
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Debug|x86.Deploy.0 = Debug|x86
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|Any CPU.ActiveCfg = Release|x86
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|ARM.ActiveCfg = Release|ARM
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|ARM.Build.0 = Release|ARM
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|ARM.Deploy.0 = Release|ARM
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|x64.ActiveCfg = Release|x64
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|x64.Build.0 = Release|x64
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|x64.Deploy.0 = Release|x64
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|x86.ActiveCfg = Release|x86
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|x86.Build.0 = Release|x86
-		{02C37316-6CB9-4101-AC68-8B44BC00E3A8}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

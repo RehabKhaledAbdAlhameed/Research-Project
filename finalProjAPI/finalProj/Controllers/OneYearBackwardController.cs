@@ -14,7 +14,8 @@ namespace finalProj.Controllers
     {
 
         // GET api/<controller>/5
-      [HttpGet]
+        [HttpGet]
+        
         public List<CompPrice> GetOneYearBackward(int compid1)
         {
             using (DBDataModel db = new DBDataModel())

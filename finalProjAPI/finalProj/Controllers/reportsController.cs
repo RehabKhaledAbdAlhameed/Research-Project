@@ -10,12 +10,12 @@ namespace finalProj.Controllers
 {
     public class reportsController : ApiController
     {
-        // [HttpPost]
-        public Report Reports (int id)
+       [HttpGet]
+        public IEnumerable<Report> Reports (int id)
         {
             using (DBDataModel db = new DBDataModel())
             {
-                return db.Reports.Where(e=>e.comp_id == id).FirstOrDefault();
+                return db.Reports.Where(e=>e.comp_id == id).ToList();
             }
         }
         [HttpGet]

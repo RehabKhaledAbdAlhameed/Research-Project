@@ -41,7 +41,10 @@ routeTemplate: "api/compid/{id}"
             //var json = config.Formatters.JsonFormatter;
             //json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
             //config.Formatters.Remove(config.Formatters.XmlFormatter);
-
+            config.Routes.MapHttpRoute(
+            name: "Api10",
+            routeTemplate: "api/CompanyPrices/"
+            );
 
         }
 

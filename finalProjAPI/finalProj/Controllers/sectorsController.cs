@@ -14,7 +14,7 @@ namespace finalProj.Controllers
     public class SectorsController : ApiController
     {
         [HttpGet]
-        public List<SectorType> GetSector()
+        public  List<SectorType> GetSector()
         {
             using (DBDataModel db = new DBDataModel())
             {
