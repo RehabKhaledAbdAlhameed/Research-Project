@@ -5,17 +5,19 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace finalProj.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class reportsController : ApiController
     {
-       [HttpGet]
+        [HttpGet]
         public IEnumerable<Report> Reports (int id)
         {
             using (DBDataModel db = new DBDataModel())
             {
-                return db.Reports.Where(e=>e.comp_id == id).ToList();
+                return db.Reports.Where(p => p.comp_id == id).ToList();
             }
         }
         [HttpGet]

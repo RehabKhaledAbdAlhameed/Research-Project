@@ -19,7 +19,7 @@ namespace finalProj.Controllers
             }
         }
         // [HttpPost]
-        public NonPeriodic_Data_Live get( int ID)
+        public NonPeriodic_Data_Live  get( int ID)
         {
             using (DBDataModel db = new DBDataModel())
             {

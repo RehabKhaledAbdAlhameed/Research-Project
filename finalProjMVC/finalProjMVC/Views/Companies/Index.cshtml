@@ -1,0 +1,137 @@
+﻿@model IEnumerable<finalProjMVC.Models.CompanyType>
+
+@{
+    ViewBag.Title = "Companies";
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 , shrink-to-fit=no">
+    <meta charset="utf-8">
+    <title>BizPage Bootstrap Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta name="author" content="">
+
+    <!-- Favicons -->
+    <link href="Content/img/favicon.png" rel="icon">
+    <link href="Content/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap CSS File -->
+    <link href="Content/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="Content/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="Content/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="Content/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="Content/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="Content/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="Content/css/style.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="Content/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template -->
+    <link href="Content/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <!-- Custom styles for this template -->
+    <link href="Content/css/agency.min.css" rel="stylesheet">
+    <style>
+        .top {
+            min-height: 400px;
+            margin-top: 10%;
+        }
+    </style>
+
+
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <section id="facts" class="wow fadeIn">
+        <div class="container">
+            @Html.Partial("_Header");
+
+
+                    <div class="row portfolio-container mt-5 pt-5 ">
+                        @foreach (var item in Model)
+                        {
+                            <div class=" div col-md-4 col-sm-6  mb-3 portfolio-item filter-app wow fadeInUp">
+
+                                <a class="portfolio-link" data-toggle="modal" href="#compid">
+
+                                    <img class="img-fluid w-100 h-75" src="~/Content/img/company/@item.IMG_URL" alt="">
+
+                                </a>
+                                <div class="portfolio-caption">
+                                    @*<h4>@item.Comp_Name</h4>*@
+                                    @*@Html.ActionLink(@item.Comp_Name, "Details", new { id = item.Comp_id , @class="h3"} )*@
+                                    @*<p class="text-muted">@item.Sec_Name </p>*@
+
+
+                                    @using (Html.BeginForm("Details", "Companies", FormMethod.Post))
+                                    {
+                                        <button  class="btn btn-block btn-dark js-scroll-trigger  text-uppercase alert alert-success" 
+                                             name="id" value=@item.Comp_id
+                                                type="submit">
+                                           @item.Comp_Name
+
+                                        </button>
+                                    }
+
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+            <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+            @Html.Partial("_Footer");
+            </div>
+        </section>
+
+            <!-- JavaScript Libraries -->
+            <script src="Content/lib/jquery/jquery.min.js"></script>
+            <script src="Content/lib/jquery/jquery-migrate.min.js"></script>
+            <script src="Content/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="Content/lib/easing/easing.min.js"></script>
+            <script src="Content/lib/superfish/hoverIntent.js"></script>
+            <script src="Content/lib/superfish/superfish.min.js"></script>
+            <script src="Content/lib/wow/wow.min.js"></script>
+            <script src="Content/lib/waypoints/waypoints.min.js"></script>
+            <script src="Content/lib/counterup/counterup.min.js"></script>
+            <script src="Content/lib/owlcarousel/owl.carousel.min.js"></script>
+            <script src="Content/lib/isotope/isotope.pkgd.min.js"></script>
+            <script src="Content/lib/lightbox/js/lightbox.min.js"></script>
+            <script src="Content/lib/touchSwipe/jquery.touchSwipe.min.js"></script>
+            <!-- Contact Form JavaScript File -->
+            <script src="Content/contactform/contactform.js"></script>
+
+            <!-- Bootstrap core JavaScript -->
+            <script src="Content/vendor/jquery/jquery.min.js"></script>
+            <script src="Content/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Plugin JavaScript -->
+            <script src="Content/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Contact form JavaScript -->
+            <script src="Content/js/jqBootstrapValidation.js"></script>
+            <script src="Content/js/contact_me.js"></script>
+            <!-- Custom scripts for this template -->
+            <script src="Content/js/agency.min.js"></script>
+
+            <!-- Template Main Javascript File -->
+            <script src="Content/js/main.js"></script>
+
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

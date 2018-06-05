@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <header id="header">
+            <div class="container-fluid">
+
+                <div id="logo" class="pull-left">
+                    <h1><a href="#intro" class="scrollto">RESearch</a></h1>
+                    <!-- Uncomment below if you prefer to use an image logo -->
+                </div>
+
+                <nav id="nav-menu-container">
+                    <ul class="nav-menu">
+                        <li class="menu-active">@Html.ActionLink("Home", "Index", "Home", null, null)</li>
+                        <li>@Html.ActionLink("Companies", "Index", "Companies", null, null)</li>
+                        <li>@Html.ActionLink("Sectors", "Index", "Sectors", null, null)</li>
+                        <li>@Html.ActionLink("Industries", "Index", "Industries", null, null)</li>
+                        @*<li>@Html.ActionLink("About Us", "Index", "About", null, null)</li>
+                        <li>@Html.ActionLink("Contact", "Index", "Contact", null, null)</li>*@
+
+
+
+                    </ul>
+                </nav>
+                <!-- #nav-menu-container -->
+            </div>
+        </header>
+    </div>
+</body>
+</html>

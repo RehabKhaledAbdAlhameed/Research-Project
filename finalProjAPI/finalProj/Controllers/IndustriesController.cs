@@ -9,9 +9,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Data;
+using System.Web.Http.Cors;
 
 namespace finalProj.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class IndustriesController : ApiController
     {
         // GET api/<controller>
