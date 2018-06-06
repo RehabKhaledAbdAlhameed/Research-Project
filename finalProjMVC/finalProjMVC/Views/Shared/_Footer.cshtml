@@ -1,14 +1,4 @@
-﻿<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-</head>
-<body>
-        <!--==========================
-      Footer
-    ============================-->
+﻿
 
         <div class="container body-content">
             <div class="row">
@@ -17,36 +7,39 @@
                         <div class="container">
                             <div class="row">
 
-                                <div class="col-lg-4 col-12 footer-info">
+                                <div class="col-lg-4 col-12 footer-info" style="text-align:left">
                                     <h3>RESearch</h3>
-                                    <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.</p>
+                                    <p>Research for all sectors, all industries, each sector contain one or more industries, and each industry
+                                    contain one or more companies,
+                                    can get data for each company and all reports for this company and can download this report.</p>
                                 </div>
 
-                                <div class="col-md-4 col-12 footer-links">
+                                <div class="col-md-4 col-12 footer-links" style="text-align:left">
                                     <h4>Useful Links</h4>
                                     <ul>
-                                        <li><i class="ion-ios-arrow-right"></i> <a href="#">Home</a></li>
-                                        <li><i class="ion-ios-arrow-right"></i> <a href="#about">About us</a></li>
-                                        <li><i class="ion-ios-arrow-right"></i> <a href="#services">Services</a></li>
+                                        <li><i class="ion-ios-arrow-right"></i> @Html.ActionLink("Home", "Index", "Home", null, null)</li>
+                                        <li><i class="ion-ios-arrow-right"></i> @Html.ActionLink("Companies", "Index", "Companies", null, null)</li>
+                                        <li><i class="ion-ios-arrow-right"></i> @Html.ActionLink("Sectors", "Index", "Sectors", null, null)</li>
+                                        <li><i class="ion-ios-arrow-right"></i> @Html.ActionLink("Industries", "Index", "Industries", null, null)</li>
                                     </ul>
                                 </div>
 
-                                <div class="col-md-4 col-12 footer-contact">
+                                <div class="col-md-4 col-12 footer-contact " style="text-align:left">
                                     <h4>Contact Us</h4>
                                     <p>
                                         A108 Adam Street <br>
                                         New York, NY 535022<br>
                                         United States <br>
                                         <strong>Phone:</strong> +1 5589 55488 55<br>
-                                        <strong>Email:</strong> info@example.com<br>
+                                        <strong>Email:</strong> RESearch_Info@gmail.com<br>
                                     </p>
 
                                     <div class="social-links">
-                                        <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-                                        <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-                                        <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
-                                        <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
-                                        <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+                                        <a href="https://twitter.com/login?lang=en" target="_blank" class="twitter"><i class="fa fa-twitter"></i></a>
+                                        <a href="https://www.facebook.com/" target="_blank" class="facebook"><i class="fa fa-facebook"></i></a>
+                                        <a href="https://www.instagram.com/accounts/login/" target="_blank" class="instagram"><i class="fa fa-instagram"></i></a>
+                                        <a href="https://plus.google.com/people" target="_blank" class="google-plus"><i class="fa fa-google-plus"></i></a>
+                                        <a href="https://www.linkedin.com/uas/login" target="_blank" class="linkedin"><i class="fa fa-linkedin"></i></a>
                                     </div>
 
                                 </div>
@@ -60,5 +53,3 @@
                 </footer><!-- #footer -->
             </div>
         </div>
-</body>
-</html>

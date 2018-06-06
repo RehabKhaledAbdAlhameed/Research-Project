@@ -9,6 +9,10 @@ using System.Web.Mvc;
 using finalProjMVC.Models;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Microsoft.WindowsAzure.Storage;
+using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage.File;
+
 
 namespace finalProjMVC.Controllers
 {
@@ -19,7 +23,7 @@ namespace finalProjMVC.Controllers
         public CompaniesController()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:51683/api/");
+            client.BaseAddress = new Uri("http://researchwebapi.azurewebsites.net/api/");
         }
 
         // GET: Companies
@@ -66,6 +70,54 @@ namespace finalProjMVC.Controllers
             }
             return View();
         }
-        
+        //public void DownloadFileFromBlob(string fileName, string containerName, string storageConnectionString)
+
+        //{
+        //    account = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue(storageConnectionString));
+
+        //    blobClient = account.CreateCloudBlobClient();
+
+        //    container = blobClient.GetContainerReference(containerName);
+
+        //    blob = container.GetBlobReference(fileName);
+
+        //    MemoryStream memStream = new MemoryStream();
+
+        //    blob.DownloadToStream(memStream);
+
+        //    Response.ContentType = blob.Properties.ContentType;
+
+        //    Response.AddHeader("Content-Disposition", "Attachment; filename=" + fileName.ToString());
+
+        //    Response.AddHeader("Content-Length", blob.Properties.Length.ToString());
+
+        //    Response.BinaryWrite(memStream.ToArray());
+
+        //}
+        public async Task<ActionResult> Download()
+        {
+            var fileName = "Download.exe";
+            var storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;");
+            var fileClient = storageAccount.CreateCloudFileClient();
+            var share = fileClient.GetShareReference("downloads");
+            if (!await share.ExistsAsync())
+            {
+                return new EmptyResult();
+            }
+            var rootDir = share.GetRootDirectoryReference();
+            var cloudFile = rootDir.GetFileReference(fileName);
+            if (!await cloudFile.ExistsAsync())
+            {
+                return new EmptyResult();
+            }
+            var policy = new SharedAccessFilePolicy
+            {
+                Permissions = SharedAccessFilePermissions.Read,
+                SharedAccessStartTime = DateTime.UtcNow.AddMinutes(-15),
+                SharedAccessExpiryTime = DateTime.UtcNow.AddHours(1)
+            };
+            var url = cloudFile.Uri.AbsoluteUri + cloudFile.GetSharedAccessSignature(policy);
+            return Redirect(url);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace meunsubmenu.Controllers
         public SectorsController()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:51683/");
+            client.BaseAddress = new Uri("http://researchwebapi.azurewebsites.net/");
         }
         // GET: Sectors
         public ActionResult Index()

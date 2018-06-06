@@ -86,8 +86,13 @@
                     {
                                                         <li class="list-group-item">
                                                             <div class="h4 ">
-                                                                @item2.Comp_Name
-                                                                <span class="h4 pl-5 ml-5"> @Html.ActionLink("Details", "Details", "Companies", new { id = item2.Comp_id }, null) </span>
+                                                                @*@item2.Comp_Name*@
+                                                                <span class="h4 pl-5 ml-5">
+                                                                @*@Html.ActionLink("Details", "Details", "Companies", new { id = item2.Comp_id }, null)*@
+                                                                    <a href='@Url.Action("Details", "Companies", new {  id = item2.Comp_id  })' target="_blank">
+                                                                        @item2.Comp_Name
+                                                                    </a>
+                                                                </span>
                                                             </div>
 
                                                         </li>
@@ -109,11 +114,13 @@
             <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
            
-            @Html.Partial("_Footer");
         </div>
-        
+
 
     </section>
+    <div>
+        @Html.Partial("_Footer");
+    </div>
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 

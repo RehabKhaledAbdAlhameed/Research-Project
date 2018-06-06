@@ -85,8 +85,13 @@
                                                         @foreach (var item2 in item.Companies)
                     {
                                                             <li class="h4 list-group-item">
-                                                                @item2.Comp_Name
-                                                                <span class="h4 pl-5 ml-5"> @Html.ActionLink("Details", "Details", "Companies", new { id = item2.Comp_id }, null)</span>
+                                                                @*@item2.Comp_Name*@
+                                                                <span class="h4 pl-5 ml-5">
+                                                               @* @Html.ActionLink("Details", "Details", "Companies", new { id = item2.Comp_id }, null)*@
+                                                                    <a href='@Url.Action("Details", "Companies", new {  id = item2.Comp_id  })' target="_blank">
+                                                                        @item2.Comp_Name
+                                                                    </a>
+                                                                </span>
 
 </li>
                                                         }

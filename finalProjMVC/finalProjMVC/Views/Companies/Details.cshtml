@@ -83,6 +83,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+
    <section id="facts" class="wow fadeIn top">
         <div class="container">
             <div class="row">
@@ -147,7 +148,7 @@
 <br /><br />
            
                 <h1 class=" text-danger" >Reports</h1>
-                <table class="table table-striped bg-light text-dark ">
+                <table class="table  bg-light text-dark ">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -161,19 +162,21 @@
                             <tr>
                                 <td >@item.Rep_Name</td>
                                 <td >@item.Date</td>
-                                <td >
-                                <button class="btn btn-block btn-dark js-scroll-trigger w-25 text-uppercase alert alert-success" type="submit">DownLoad</button></td>
+                                <td>
+                                <td><button class="btn btn-block btn-dark js-scroll-trigger w-25 text-uppercase alert alert-success" type="button" onclick="lacation.href='@Url.Action("Download","CompaniesController")'">DownLoad</button></td>
+
+                                
                             </tr>
                         }
                     </tbody>
 
                 </table>
            <br /><br />
-            <p>
-                @Html.ActionLink("Back to List", "Index")
-            </p>
+           
         </div>
     </section>
+
+    @Html.Partial("_Footer");
     <!-- JavaScript Libraries -->
     <script src="Content/lib/jquery/jquery.min.js"></script>
     <script src="Content/lib/jquery/jquery-migrate.min.js"></script>

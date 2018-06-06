@@ -18,7 +18,7 @@ namespace meunsubmenu.Controllers
         public IndustriesController()
         {
             client = new HttpClient();
-            client.BaseAddress= new Uri("http://localhost:51683/");
+            client.BaseAddress= new Uri("http://researchwebapi.azurewebsites.net/");
         }
         public ActionResult Index()
         {

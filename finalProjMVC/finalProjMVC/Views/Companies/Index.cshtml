@@ -77,16 +77,20 @@
                                     @*@Html.ActionLink(@item.Comp_Name, "Details", new { id = item.Comp_id , @class="h3"} )*@
                                     @*<p class="text-muted">@item.Sec_Name </p>*@
 
-
-                                    @using (Html.BeginForm("Details", "Companies", FormMethod.Post))
+                                    <a type="button" href='@Url.Action("Details", "Companies", new { id= @item.Comp_id })' target="_blank"
+                                       class="btn btn-block btn-dark js-scroll-trigger  text-uppercase alert alert-success button">
+                                        @item.Comp_Name
+                                    </a>
+                                    @*@using (Html.BeginForm("Details", "Companies", FormMethod.Post))
                                     {
                                         <button  class="btn btn-block btn-dark js-scroll-trigger  text-uppercase alert alert-success" 
-                                             name="id" value=@item.Comp_id
+                                             name="id" value=@item.Comp_id  
                                                 type="submit">
                                            @item.Comp_Name
-
+                                          
                                         </button>
-                                    }
+                                       
+                                    }*@
 
 
                                 </div>
