@@ -516,8 +516,14 @@ namespace ExcelProject
             }
            
 
+            if(UploadBtnFlag)
+               CheckRequired();
+            else
+            {
+                MessageBox.Show("Upload Data First , please  ");
+                return;
+            }
 
-                CheckRequired();
 
             if (Flag == true && UploadBtnFlag == true)
             {
