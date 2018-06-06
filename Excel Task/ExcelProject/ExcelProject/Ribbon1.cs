@@ -1052,16 +1052,15 @@ namespace ExcelProject
 
                                 return;
                             }
+                            else if (!double.TryParse(val,out double x))
+                            {
+                                Flag = false;
+                                MessageBox.Show("Enter Just Numbers Please :)");
+
+                                return;
+                            }
                         }
 
-                        string v = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2.ToString();
-                        if (v.Any(x=>x=='-'))
-                        {
-                            //Flag = false;
-                            //MessageBox.Show("Enter Positive Number Please");
-                            
-                            //return;
-                        }
 
                     }
                 }
@@ -1074,21 +1073,20 @@ namespace ExcelProject
                         
                    
 
-                        string v = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2?.ToString();
-
-                        if (!string.IsNullOrEmpty(v))
-                        {
-                            if (v.Any(x => x == '-'))
+                            string val = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2?.ToString();
+                            if (!string.IsNullOrWhiteSpace(val))
                             {
-                                //Flag = false;
-                                //MessageBox.Show("Enter Positive Number Please");
+                                if (!double.TryParse(val, out double x))
+                                {
+                                    Flag = false;
+                                    MessageBox.Show("Enter Just Numbers Please :)");
 
-                                //return;
-                            }
-                            
-                        
+                                    return;
+                                }
                         }
-                      
+                    
+
+
 
                     }
                 }
