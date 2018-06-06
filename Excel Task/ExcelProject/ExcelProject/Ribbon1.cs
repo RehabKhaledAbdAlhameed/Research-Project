@@ -1042,6 +1042,17 @@ namespace ExcelProject
                             return;
 
                         }
+                        else
+                        {
+                            string val = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2.ToString();
+                            if (string.IsNullOrWhiteSpace(val))
+                            {
+                                Flag = false;
+                                MessageBox.Show("No Blank Space in Required Fields Please :)");
+
+                                return;
+                            }
+                        }
 
                         string v = ((Microsoft.Office.Interop.Excel.Range)area[r, c]).Value2.ToString();
                         if (v.Any(x=>x=='-'))
