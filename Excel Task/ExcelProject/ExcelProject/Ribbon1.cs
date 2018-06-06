@@ -15,7 +15,7 @@ namespace ExcelProject
     {
 
         #region Declarations
-        int RateCode = 1003, TargetPriceCode = 1004, ITCode = 1005, VRCode = 1005;
+        int RateCode = 1002, TargetPriceCode = 1003, ITCode = 1004, VRCode = 1005;
         Worksheet CurrentSheet;
         Company MyCompanyData=new Company();
         private bool Flag = true;bool IsThereLastPrice = false, IsTemplateCreated = false, Has_NonPeriodic_Data_Draft = false; bool UploadBtnFlag = false;
