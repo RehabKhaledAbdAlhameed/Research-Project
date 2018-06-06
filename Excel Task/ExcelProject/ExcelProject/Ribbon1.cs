@@ -461,7 +461,7 @@ namespace ExcelProject
         private void Fill_NonPeriodic_Data(Company company)
         {
 
-            if (List_NonPeriodic_DataDraft_Data?.Count!=200)
+            if (List_NonPeriodic_DataDraft_Data?.Count>100)
             {
                 Microsoft.Office.Interop.Excel.Worksheet activeSheet = Globals.ThisAddIn.Application.ActiveSheet;
                 Microsoft.Office.Interop.Excel.Range Range_ = activeSheet.UsedRange;
