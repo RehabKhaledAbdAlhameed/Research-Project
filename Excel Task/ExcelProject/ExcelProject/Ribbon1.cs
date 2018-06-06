@@ -380,12 +380,17 @@ namespace ExcelProject
                     {
                         CurrentSheet.Range["B3"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White);
                         CurrentSheet.Range["A3"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White);
+                        try
+                        {
+                            //Fill All Excel Sheet
+                            FillCompanyData(MyCompanyData);
+                            Fill_Required_NonPeriodic_Data(MyCompanyData);
+                            Fill_NonPeriodic_Data(MyCompanyData);
+                        }catch(Exception ex)
+                        {
+                            MessageBox.Show($"Error has occured : {ex.Message}");
 
-                        //Fill All Excel Sheet
-                        FillCompanyData(MyCompanyData);
-                        Fill_Required_NonPeriodic_Data(MyCompanyData);
-                        Fill_NonPeriodic_Data(MyCompanyData);
-
+                        }
                     }
                     else
                     {
@@ -456,7 +461,7 @@ namespace ExcelProject
         private void Fill_NonPeriodic_Data(Company company)
         {
 
-            if (List_NonPeriodic_DataDraft_Data?.Count!=0)
+            if (List_NonPeriodic_DataDraft_Data?.Count!=200)
             {
                 Microsoft.Office.Interop.Excel.Worksheet activeSheet = Globals.ThisAddIn.Application.ActiveSheet;
                 Microsoft.Office.Interop.Excel.Range Range_ = activeSheet.UsedRange;
