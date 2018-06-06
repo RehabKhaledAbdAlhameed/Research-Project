@@ -352,7 +352,13 @@ namespace ExcelProject
 
         private void button3_Click(object sender, RibbonControlEventArgs e)
         {
-               UploadBtnFlag = true;
+            if (!IsTemplateCreated)//If User Doesn't click on Create First
+            {
+                MessageBox.Show("Create Template First please");
+                return;
+            }
+
+            UploadBtnFlag = true;
                CurrentSheet = Globals.ThisAddIn.GetActiveWorkSheet();
 
             //string r = CurrentSheet.Range["B3"].Value?.ToString();
